@@ -8,7 +8,7 @@ class NewsSource(models.Model):
     PARSERS_DEFAULT = "default"
     PARSERS = [
         ("default", "Default"),
-        ("default", "UA Pravda")
+        ("uapravda", "UA Pravda")
     ]
 
     name = models.CharField(
@@ -29,3 +29,58 @@ class NewsSource(models.Model):
         "Last parsed",
         auto_now_add=True
     )
+
+    def __str__(self):
+        """Models item representation."""
+        return self.name
+
+    class Meta:
+        """Addition data for model."""
+
+        verbose_name = "Source"
+        verbose_name_plural = "Sources"
+
+
+class NewsMessage(models.Model):
+    """Model for individual news message."""
+
+    STATUS_DEFAULT = "new"
+    STATUS_VARIANTS = [
+        ("new", "New"),
+        ("completed", "Completed")
+    ]
+
+    title = models.CharField(
+        "Title",
+        max_length=1000
+    )
+    text = models.TextField(
+        "Text"
+    )
+    link = models.URLField(
+        "Link",
+        max_length=250
+    )
+    date = models.DateTimeField(
+        "Date"
+    )
+    source = models.ForeignKey(
+        "NewsSource",
+        on_delete=models.CASCADE
+    )
+    status = models.CharField(
+        "Status",
+        max_length=20,
+        choices=STATUS_VARIANTS,
+        default=STATUS_DEFAULT
+    )
+
+    def __str__(self):
+        """Models item representation."""
+        return "{}: {} / {}".format(self.source, self.title, self.date)
+
+    class Meta:
+        """Addition data for model."""
+
+        verbose_name = "News item"
+        verbose_name_plural = "News items"
