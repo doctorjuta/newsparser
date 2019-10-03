@@ -58,7 +58,7 @@ class SourceParser:
             if text_div:
                 for script in text_div(["script", "style"]):
                     script.decompose()
-                text = text_div.get_text(strip=True)
+                text = text_div.get_text()
             else:
                 logger_message = "Can not find text block for URL {}".format(
                     link
