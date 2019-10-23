@@ -4,7 +4,7 @@ from datetime import datetime
 import pytz
 from bs4 import BeautifulSoup
 import urllib.request as ur
-from newsparse.logger import AppLogger
+from config.logger import AppLogger
 
 
 class SourceParser:

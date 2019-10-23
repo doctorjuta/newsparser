@@ -2,7 +2,7 @@
 import importlib
 import datetime
 from django.utils import timezone
-from newsparse.logger import AppLogger
+from config.logger import AppLogger
 
 
 class MainParser:
@@ -18,7 +18,7 @@ class MainParser:
 
     def get_sources(self):
         """Get sources to parse."""
-        from newssources.models import NewsSource
+        from models.models import NewsSource
         now = timezone.now()
         d = now - datetime.timedelta(minutes=10)
         self.sources = NewsSource.objects.filter(
@@ -28,7 +28,7 @@ class MainParser:
 
     def get_news(self):
         """Load module for parsing and scrape news."""
-        from newssources.models import NewsMessage
+        from models.models import NewsMessage
         for s in self.sources:
             import_module = "parsers.{}".format(s.parser)
             try:
@@ -50,9 +50,11 @@ class MainParser:
                     title=n["title"],
                     link=n["link"],
                     date=n["date"],
-                    text=n["text"],
                     source=s
                 )
+                if created:
+                    obj.text = n["text"]
+                    obj.save()
             now = timezone.now()
             s.last_parsed = now
             s.save()
