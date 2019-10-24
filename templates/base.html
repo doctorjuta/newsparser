@@ -7,8 +7,13 @@
         <meta name="viewport" content="width=device-width">
         <title>{% block title %}News tonality projecct{% endblock %}</title>
         <link rel="stylesheet" href="{% static 'dist/main.css' %}">
+        <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
+        <script>
+            const rest_url = "{% url 'rest_api' %}";
+        </script>
     </head>
     <body>
         {% block content %}{% endblock %}
+        <script src="{% static 'dist/main.js' %}"></script>
     </body>
 </html>

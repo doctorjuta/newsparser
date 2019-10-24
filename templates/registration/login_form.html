@@ -1,0 +1,34 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% if form.errors %}
+    {% include "messages/error.html" with text="Your username and password didn't match. Please try again." %}
+{% endif %}
+{% if next %}
+    {% if user.is_authenticated %}
+        {% include "messages/error.html" with text="Your account doesn't have access to this page. To proceed, please login with an account that has access." %}
+    {% else %}
+        {% include "messages/error.html" with text="Please login to see this page." %}
+    {% endif %}
+{% endif %}
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <div class="field">
+        <label class="label">{{ form.username.label_tag }}</label>
+        <div class="control">
+            {{ form.username|add_class:"input" }}
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">{{ form.password.label_tag }}</label>
+        <div class="control">
+            {{ form.password|add_class:"input" }}
+        </div>
+    </div>
+    <div class="field">
+        <div class="control">
+            <input type="submit" class="button is-link" value="{% trans "Submit" %}">
+        </div>
+    </div>
+    <input type="hidden" name="next" value="{{ next }}">
+</form>

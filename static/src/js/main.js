@@ -1,6 +1,7 @@
 import jQuery from "jquery";
 import "bulma/css/bulma.css";
 import "../less/style.less";
+import DataChart from "./data_chart";
 
 
 jQuery.noConflict();
@@ -13,8 +14,15 @@ jQuery.noConflict();
         let wind = $(window);
         let self = this;
 
-        self.run = function() {
+        function initCharts() {
+            $(".chart").each(function() {
+                let chart = new DataChart($(this));
+                chart.init();
+            });
+        }
 
+        self.run = function() {
+            initCharts();
         }
 
     }

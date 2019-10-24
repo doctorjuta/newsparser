@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{% trans "Login" %}{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container">
+            {% include "registration/login_form.html" %}
+        </div>
+    </section>
+{% endblock %}
