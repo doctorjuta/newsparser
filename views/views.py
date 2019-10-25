@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.views import View
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.mixins import LoginRequiredMixin
+import datetime
 from models.models import NewsMessage, NewsTonal
 
 class HomePageView(LoginRequiredMixin, View):
@@ -34,39 +35,33 @@ class RESTAPIView(View):
             )
         action = request.POST["action"]
         data = False
-        if action == "charts":
-            data = self.chartsRequest(request)
-        if data:
-            return JsonResponse({
-                "data": data
-            })
-        else:
-            return HttpResponseBadRequest(
-                "Invalid action argument."
-            )
+        if action == "tonality_charts":
+            data = self.tonalityChart(request)
+        return JsonResponse({
+            "data": data
+        })
 
-    def chartsRequest(self, request):
+    def tonalityChart(self, request):
         """Return data for charts."""
-        if "model" not in request.POST:
-            return False
-        model = request.POST["model"]
         data = []
-        if model == "news":
-            objs = NewsMessage.objects.all()[:self.MAX_VAL]
-            for item in objs:
-                data.append({
-                    "title": item.title,
-                    "text": item.text,
-                    "link": item.link,
-                    "date": item.date,
-                    "source": item.source.name
-                })
-        if model == "tonal":
-            objs = NewsTonal.objects.all()[:self.MAX_VAL]
-            for item in objs:
-                data.append({
-                    "news_title": item.news_item.title,
-                    "tonality": item.tonality,
-                    "tonality_index": item.tonality_index
-                })
+        time = "today"
+        if "time" in request.POST:
+            time = request.POST["time"]
+        today = datetime.date.today()
+        if time == "yesterday":
+            yesterday = today - datetime.timedelta(days = 1)
+            objs = NewsTonal.objects.all().filter(
+                news_item__date__date=yesterday
+            )[:self.MAX_VAL]
+        else:
+            objs = NewsTonal.objects.all().filter(
+                news_item__date__startswith=today
+            )[:self.MAX_VAL]
+        for item in objs:
+            data.append({
+                "news_title": item.news_item.title,
+                "news_date": item.news_item.date,
+                "tonality": item.tonality,
+                "tonality_index": item.tonality_index
+            })
         return data

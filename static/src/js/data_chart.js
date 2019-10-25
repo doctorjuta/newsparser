@@ -19,11 +19,48 @@ export default function DataChart(obj) {
         console.log("Error");
     }
 
+    function renderChart(data) {
+        let chart_title = obj.attr("data-title");
+        let chart_border_color = obj.attr("data-bcolor");
+        let chart_point_color = obj.attr("data-pcolor");
+        let chart_data = data.map(function(it) {
+            return it["tonality_index"];
+        });
+        let chart_labels = data.map(function(it) {
+            let it_date = new Date(it["news_date"]);
+            return it_date.getMonth() + "/" + it_date.getDate() + " " + it_date.getHours() + ":" + it_date.getMinutes();
+        });
+        let ctx = obj[0].getContext("2d");
+        let chart = new Chart(ctx, {
+            type: "line",
+            data: {
+                labels: chart_labels,
+                datasets: [{
+                    label: chart_title,
+                    data: chart_data,
+                    backgroundColor: "transparent",
+                    borderColor: chart_border_color,
+                    pointBackgroundColor: chart_point_color,
+                    lineTension: 0,
+                    pointBorderWidth: 0,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
+                }
+            }
+        });
+    }
+
     self.init = function() {
-        let model = obj.attr("data-model");
         let param = {
-            model: model,
-            action: "charts"
+            action: "tonality_charts"
+        }
+        let request_time = obj.attr("data-time");
+        if (request_time) {
+            param.time = request_time;
         }
         $.ajax({
             url: rest_url,
@@ -45,7 +82,7 @@ export default function DataChart(obj) {
                 requestError(errorMessage);
             },
             success: function(resp, textStatus, jqXHR) {
-                console.log(resp.data);
+                renderChart(resp.data);
             }
         });
     }

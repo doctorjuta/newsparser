@@ -1,11 +1,29 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
     <section class="section">
         <div class="container">
-            <div id="home-top-graph" class="chart" data-model="tonal"></div>
+            <h2 class="title is-2 has-text-centered">{% trans "Tonality today" %}</h2>
+            <canvas id="tonality-graph-today" class="chart"
+                data-title="Tonality"
+                data-bcolor="#cc0088"
+                data-pcolor="#800055"
+                data-time="today"
+            ></canvas>
+        </div>
+    </section>
+    <section class="section">
+        <div class="container">
+            <h2 class="title is-2 has-text-centered">{% trans "Tonality yesterday" %}</h2>
+            <canvas id="tonality-graph-yesterday" class="chart"
+                data-title="Tonality"
+                data-bcolor="#cc0088"
+                data-pcolor="#800055"
+                data-time="yesterday"
+            ></canvas>
         </div>
     </section>
 {% endblock %}
