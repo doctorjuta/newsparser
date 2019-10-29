@@ -93,7 +93,7 @@ class RESTAPIView(View):
             ).order_by("news_item__date")[:self.MAX_VAL]
         else:
             objs = NewsTonal.objects.all().filter(
-                news_item__date__startswith=today
+                news_item__date__date=today
             ).order_by("news_item__date")[:self.MAX_VAL]
         for item in objs:
             data.append({
