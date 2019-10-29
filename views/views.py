@@ -52,11 +52,11 @@ class RESTAPIView(View):
             yesterday = today - datetime.timedelta(days = 1)
             objs = NewsTonal.objects.all().filter(
                 news_item__date__date=yesterday
-            )[:self.MAX_VAL]
+            ).order_by("news_item__date")[:self.MAX_VAL]
         else:
             objs = NewsTonal.objects.all().filter(
                 news_item__date__startswith=today
-            )[:self.MAX_VAL]
+            ).order_by("news_item__date")[:self.MAX_VAL]
         for item in objs:
             data.append({
                 "news_title": item.news_item.title,
