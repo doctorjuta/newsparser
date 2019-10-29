@@ -4,7 +4,8 @@ from django.views import View
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.contrib.auth.mixins import LoginRequiredMixin
 import datetime
-from models.models import NewsMessage, NewsTonal
+from models.models import NewsTonal
+
 
 class HomePageView(LoginRequiredMixin, View):
     """CBV for home page."""
@@ -17,7 +18,7 @@ class HomePageView(LoginRequiredMixin, View):
             "title": "Home page"
         }
         today = datetime.date.today()
-        yesterday = today - datetime.timedelta(days = 1)
+        yesterday = today - datetime.timedelta(days=1)
         data = self.get_data(today, data, "today")
         data = self.get_data(yesterday, data, "yesterday")
         return render(
@@ -37,7 +38,7 @@ class HomePageView(LoginRequiredMixin, View):
             tonality_index__lt=0
         )
         all = NewsTonal.objects.all().filter(
-            news_item__date__date=datetime.date(2019, 10, 29)
+            news_item__date__date=date
         )
         avarage = 0
         max_val = 0
@@ -86,7 +87,7 @@ class RESTAPIView(View):
             time = request.POST["time"]
         today = datetime.date.today()
         if time == "yesterday":
-            yesterday = today - datetime.timedelta(days = 1)
+            yesterday = today - datetime.timedelta(days=1)
             objs = NewsTonal.objects.all().filter(
                 news_item__date__date=yesterday
             ).order_by("news_item__date")[:self.MAX_VAL]
