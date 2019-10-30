@@ -8,7 +8,8 @@ class NewsSource(models.Model):
     PARSERS_DEFAULT = "default"
     PARSERS = [
         ("default", "Default"),
-        ("uapravda", "UA Pravda")
+        ("uapravda", "UA Pravda"),
+        ("obozrevatel", "Obozrevatel")
     ]
 
     name = models.CharField(
@@ -86,8 +87,8 @@ class NewsMessage(models.Model):
         verbose_name_plural = "News items"
 
 
-class NewsTonal(models.Model):
-    """Model for news tonality."""
+class TonalityBase(models.Model):
+    """Abstract class for all tonalities."""
 
     TONALITY_DEFAULT = 0
     TONALITY_VARIANTS = [
@@ -96,19 +97,28 @@ class NewsTonal(models.Model):
         (-1, "Negative")
     ]
 
-    news_item = models.ForeignKey(
-        "NewsMessage",
-        on_delete=models.CASCADE
-    )
-    tonality = models.CharField(
+    tonality = models.IntegerField(
         "Tonality",
-        max_length=10,
         choices=TONALITY_VARIANTS,
         default=TONALITY_DEFAULT
     )
-    tonality_index = models.IntegerField(
+    tonality_index = models.FloatField(
         "Tonality index",
-        default=TONALITY_DEFAULT
+        default=0.0
+    )
+
+    class Meta:
+        """Addition data for model."""
+
+        abstract = True
+
+
+class NewsTonal(TonalityBase):
+    """Model for news tonality."""
+
+    news_item = models.ForeignKey(
+        "NewsMessage",
+        on_delete=models.CASCADE
     )
 
     def __str__(self):
@@ -120,3 +130,21 @@ class NewsTonal(models.Model):
 
         verbose_name = "Tonality"
         verbose_name_plural = "Tonalities"
+
+
+class NewsTonalDaily(TonalityBase):
+    """Summary tonality for every days."""
+
+    date = models.DateField(
+        "Date"
+    )
+
+    def __str__(self):
+        """Models item representation."""
+        return "{}: {}".format(self.date, self.tonality_index)
+
+    class Meta:
+        """Addition data for model."""
+
+        verbose_name = "Daily tonality"
+        verbose_name_plural = "Daily tonalities"
