@@ -2,43 +2,45 @@
 from django.shortcuts import render
 from django.views import View
 from django.http import JsonResponse, HttpResponseBadRequest
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils import timezone
 import datetime
-from models.models import NewsTonal
+from models.models import NewsTonal, NewsTonalDaily
 
 
-class HomePageView(LoginRequiredMixin, View):
+class HomePageView(View):
     """CBV for home page."""
-
-    template_name = "home.html"
 
     def get(self, request, *args, **kwargs):
         """Home page - get request."""
         data = {
             "title": "Home page"
         }
-        today = datetime.date.today()
-        yesterday = today - datetime.timedelta(days=1)
-        data = self.get_data(today, data, "today")
-        data = self.get_data(yesterday, data, "yesterday")
+        if request.user.is_authenticated:
+            template_name = "home-login.html"
+            today = datetime.date.today()
+            yesterday = today - datetime.timedelta(days=1)
+            data = self.get_data(today, data, "today")
+            data = self.get_data(yesterday, data, "yesterday")
+        else:
+            template_name = "home-anonimous.html"
         return render(
             request,
-            self.template_name,
+            template_name,
             data
         )
 
     def get_data(self, date, data, prefix):
         """Simple wrapper for home request for getting data."""
         positive = NewsTonal.objects.all().filter(
-            news_item__date__date=date,
+            news_item__date__startswith=date,
             tonality_index__gte=0
         )
         negative = NewsTonal.objects.all().filter(
-            news_item__date__date=date,
+            news_item__date__startswith=date,
             tonality_index__lt=0
         )
         all = NewsTonal.objects.all().filter(
-            news_item__date__date=date
+            news_item__date__startswith=date
         )
         avarage = 0
         max_val = 0
@@ -74,13 +76,15 @@ class RESTAPIView(View):
         action = request.POST["action"]
         data = False
         if action == "tonality_charts":
-            data = self.tonalityChart(request)
+            data = self.tonalityGeneral(request)
+        if action == "tonality_daily":
+            data = self.tonalityDaily(request)
         return JsonResponse({
             "data": data
         })
 
-    def tonalityChart(self, request):
-        """Return data for charts."""
+    def tonalityGeneral(self, request):
+        """Return data for tonality by provided time range."""
         data = []
         time = "today"
         if "time" in request.POST:
@@ -89,7 +93,7 @@ class RESTAPIView(View):
         if time == "yesterday":
             yesterday = today - datetime.timedelta(days=1)
             objs = NewsTonal.objects.all().filter(
-                news_item__date__date=yesterday
+                news_item__date__startswith=yesterday
             ).order_by("news_item__date")[:self.MAX_VAL]
         else:
             objs = NewsTonal.objects.all().filter(
@@ -99,6 +103,21 @@ class RESTAPIView(View):
             data.append({
                 "news_title": item.news_item.title,
                 "news_date": item.news_item.date,
+                "tonality": item.tonality,
+                "tonality_index": item.tonality_index
+            })
+        return data
+
+    def tonalityDaily(self, request):
+        """Return data for tonality dailty charts."""
+        data = []
+        start_day = timezone.now() - datetime.timedelta(days=30)
+        last_daily_tonality = NewsTonalDaily.objects.all().filter(
+            date__gte=start_day
+        ).order_by("date")
+        for item in last_daily_tonality:
+            data.append({
+                "date": item.date,
                 "tonality": item.tonality,
                 "tonality_index": item.tonality_index
             })

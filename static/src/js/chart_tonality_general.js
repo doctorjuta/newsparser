@@ -1,28 +1,14 @@
 import Chart from "chart.js";
 import $ from "jquery";
 import {getCookie, csrfSafeMethod} from "./ajax_helpers";
+import ChartGeneral from "./chart_general";
 
 
-export default function DataChart(obj) {
+export default class ChartTonalityGeneral extends ChartGeneral {
 
-    let self = this;
-    let charts_positive_color = "#00ff00";
-    let charts_negative_color = "#ff0000";
-
-    function requestStart() {
-        obj.addClass("loading");
-    }
-
-    function requestEnd() {
-        obj.removeClass("loading");
-    }
-
-    function requestError(text) {
-        console.log("Error");
-    }
-
-    function renderChart(data) {
-        let chart_title = obj.attr("data-title");
+    renderChart(data) {
+        let self = this;
+        let chart_title = self.obj.attr("data-title");
         let chart_labels = [];
         let data_positive = [];
         let data_negative = [];
@@ -39,7 +25,7 @@ export default function DataChart(obj) {
                 data_negative.push(it["tonality_index"]);
             }
         }
-        let ctx = obj[0].getContext("2d");
+        let ctx = self.obj[0].getContext("2d");
         let chart = new Chart(ctx, {
             type: "bar",
             data: {
@@ -48,13 +34,13 @@ export default function DataChart(obj) {
                     {
                         label: "Positive",
                         data: data_positive,
-                        backgroundColor: charts_positive_color,
+                        backgroundColor: self.charts_positive_color,
                         barPercentage: 1.0
                     },
                     {
                         label: "Negative",
                         data: data_negative,
-                        backgroundColor: charts_negative_color,
+                        backgroundColor: self.charts_negative_color,
                         barPercentage: 1.0
                     }
                 ]
@@ -84,11 +70,12 @@ export default function DataChart(obj) {
         });
     }
 
-    self.init = function() {
+    init() {
+        let self = this;
         let param = {
             action: "tonality_charts"
         }
-        let request_time = obj.attr("data-time");
+        let request_time = self.obj.attr("data-time");
         if (request_time) {
             param.time = request_time;
         }
@@ -102,17 +89,17 @@ export default function DataChart(obj) {
                     let csrftoken = getCookie("csrftoken");
                     xhr.setRequestHeader("X-CSRFToken", csrftoken);
                 }
-                requestStart();
+                self.requestStart();
             },
             complete: function() {
-                requestEnd();
+                self.requestEnd();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 let errorMessage = "Projects error: " + errorThrown + " URL: " + window.location.href;
-                requestError(errorMessage);
+                self.requestError(errorMessage);
             },
             success: function(resp, textStatus, jqXHR) {
-                renderChart(resp.data);
+                self.renderChart(resp.data);
             }
         });
     }

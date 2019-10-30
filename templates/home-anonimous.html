@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+    <section class="section">
+        <div class="container">
+            <h1 class="title is-2 has-text-centered">{% trans "Welcome to NewsDetect project" %}</h1>
+            <canvas id="tonality-graph-dayli" class="chart chart_tonality_daily" data-title="{% trans 'Last daily tonality (30 days)' %}"></canvas>
+            <div class="content">
+                <p>Full content availible only for login users.</p>
+            </div>
+        </div>
+    </section>
+{% endblock %}

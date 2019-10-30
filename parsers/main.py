@@ -20,7 +20,7 @@ class MainParser:
         """Get sources to parse."""
         from models.models import NewsSource
         now = timezone.now()
-        d = now - datetime.timedelta(minutes=10)
+        d = now - datetime.timedelta(minutes=5)
         self.sources = NewsSource.objects.filter(
             last_parsed__lt=d
         )

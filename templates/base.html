@@ -13,7 +13,9 @@
         </script>
     </head>
     <body>
+        {% include 'elements/header.html' %}
         {% block content %}{% endblock %}
+        {% include 'elements/footer.html' %}
         <script src="{% static 'dist/main.js' %}"></script>
     </body>
 </html>
