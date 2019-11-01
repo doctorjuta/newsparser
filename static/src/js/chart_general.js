@@ -15,7 +15,7 @@ export default class ChartGeneral {
     }
 
     requestError(text) {
-        console.log("Error");
+        console.log(text);
     }
 
     renderChart(data) {}
