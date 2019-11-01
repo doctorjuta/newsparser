@@ -41,12 +41,12 @@ class MainParser:
             news = parser.get_news()
             for n in news:
                 obj, created = NewsMessage.objects.get_or_create(
-                    title=n["title"],
                     link=n["link"],
                     date=n["date"],
                     source=s
                 )
                 if created:
+                    obj.title = n["title"]
                     obj.text = n["text"]
                     obj.save()
             now = timezone.now()
