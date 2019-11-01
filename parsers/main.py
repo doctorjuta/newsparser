@@ -1,6 +1,5 @@
 """Parsers library."""
 import importlib
-import datetime
 from django.utils import timezone
 from config.logger import AppLogger
 
@@ -19,12 +18,7 @@ class MainParser:
     def get_sources(self):
         """Get sources to parse."""
         from models.models import NewsSource
-        now = timezone.now()
-        d = now - datetime.timedelta(minutes=5)
-        self.sources = NewsSource.objects.filter(
-            last_parsed__lt=d
-        )
-        # self.sources = NewsSource.objects.all()
+        self.sources = NewsSource.objects.all()
 
     def get_news(self):
         """Load module for parsing and scrape news."""

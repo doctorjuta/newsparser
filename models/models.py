@@ -9,7 +9,8 @@ class NewsSource(models.Model):
     PARSERS = [
         ("default", "Default"),
         ("uapravda", "UA Pravda"),
-        ("obozrevatel", "Obozrevatel")
+        ("obozrevatel", "Obozrevatel"),
+        ("segodnya", "Segodnya")
     ]
 
     name = models.CharField(

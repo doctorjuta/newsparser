@@ -31,14 +31,9 @@ class HomePageView(View):
 
     def get_data(self, date, data, prefix):
         """Simple wrapper for home request for getting data."""
-        positive = NewsTonal.objects.all().filter(
-            news_item__date__startswith=date,
-            tonality_index__gte=0
-        )
-        negative = NewsTonal.objects.all().filter(
-            news_item__date__startswith=date,
-            tonality_index__lt=0
-        )
+        positive = 0
+        negative = 0
+        neutral = 0
         all = NewsTonal.objects.all().filter(
             news_item__date__startswith=date
         )
@@ -51,10 +46,17 @@ class HomePageView(View):
                 max_val = it.tonality_index
             if it.tonality_index < min_val:
                 min_val = it.tonality_index
+            if it.tonality_index > 0:
+                positive += 1
+            elif it.tonality_index < 0:
+                negative += 1
+            else:
+                neutral += 1
         if len(all) > 0:
             avarage = round(avarage/len(all), 2)
-        data["{}_count_positive".format(prefix)] = len(positive)
-        data["{}_count_negative".format(prefix)] = len(negative)
+        data["{}_count_positive".format(prefix)] = positive
+        data["{}_count_negative".format(prefix)] = negative
+        data["{}_count_neutral".format(prefix)] = neutral
         data["{}_count_all".format(prefix)] = len(all)
         data["{}_avarage_val".format(prefix)] = avarage
         data["{}_max_val".format(prefix)] = max_val

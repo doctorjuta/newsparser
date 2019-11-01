@@ -1,6 +1,7 @@
 """Console commands for sync news in DB."""
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from parsers.main import MainParser
+
 
 class Command(BaseCommand):
     """Main class for sync news in DB."""
