@@ -10,7 +10,10 @@ class NewsSource(models.Model):
         ("default", "Default"),
         ("uapravda", "UA Pravda"),
         ("obozrevatel", "Obozrevatel"),
-        ("segodnya", "Segodnya")
+        ("segodnya", "Segodnya"),
+        ("ua24", "24 channel"),
+        ("rbc", "RBC"),
+        ("znaj", "Znaj")
     ]
 
     name = models.CharField(
