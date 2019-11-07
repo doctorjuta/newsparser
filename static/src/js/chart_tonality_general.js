@@ -16,7 +16,7 @@ export default class ChartTonalityGeneral extends ChartGeneral {
         for (let i=0;i<count_val;i++) {
             let it = data[i];
             let it_date = new Date(it["news_date"]);
-            chart_labels.push(it_date.getMonth()+1 + "/" + it_date.getDate() + " " + it_date.getHours() + ":" + it_date.getMinutes());
+            chart_labels.push(it_date.getMonth()+1 + "/" + it_date.getDate() + " " + ("0" + it_date.getHours()).slice(-2) + ":" + ("0" + it_date.getMinutes()).slice(-2));
             if (it["tonality_index"] >= 0) {
                 data_positive.push(it["tonality_index"]);
                 data_negative.push(0);
