@@ -6,7 +6,8 @@
 {% block content %}
     <section class="section">
         <div class="container">
-            <h2 class="title is-2 has-text-centered">{% trans "Tonality today" %}</h2>
+            <h1 class="title is-2 has-text-centered">{% trans "Tonality" %}</h1>
+            <p class="title is-3 has-text-centered">{% trans "Tonality today" %}</p>
             <canvas id="tonality-graph-today" class="chart chart_tonality_general" data-time="today" data-title="{% trans 'Last tonality (200 vals)' %}"></canvas>
             <div class="chart_addtext">
                 <div class="level">
@@ -54,7 +55,7 @@
     </section>
     <section class="section">
         <div class="container">
-            <h2 class="title is-2 has-text-centered">{% trans "Tonality yesterday" %}</h2>
+            <p class="title is-3 has-text-centered">{% trans "Tonality yesterday" %}</p>
             <canvas id="tonality-graph-yesterday" class="chart chart_tonality_general" data-time="yesterday" data-title="{% trans 'Last tonality (200 vals)' %}"></canvas>
             <div class="chart_addtext">
                 <div class="level">
