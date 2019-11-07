@@ -24,6 +24,14 @@ class NewsSource(models.Model):
         "Source main page URL",
         max_length=200
     )
+    desctiption = models.TextField(
+        "Desctiption",
+        default=""
+    )
+    logo = models.ImageField(
+        "Logo",
+        upload_to="logos/"
+    )
     parser = models.CharField(
         "Parser",
         max_length=20,

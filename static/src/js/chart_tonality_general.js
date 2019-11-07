@@ -79,6 +79,10 @@ export default class ChartTonalityGeneral extends ChartGeneral {
         if (request_time) {
             param.time = request_time;
         }
+        let request_source = self.obj.attr("data-source");
+        if (request_source) {
+            param.source_id = request_source;
+        }
         $.ajax({
             url: rest_url,
             dataType: "json",
