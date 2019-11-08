@@ -1,9 +1,11 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import NewsSource, NewsMessage, NewsTonal, NewsTonalDaily
+from .models import Pages
 
 
 admin.site.register(NewsSource)
+admin.site.register(Pages)
 
 
 @admin.register(NewsMessage)

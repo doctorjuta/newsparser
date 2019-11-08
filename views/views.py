@@ -5,17 +5,16 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views import View
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.utils import timezone
+from django.utils.translation import gettext as _
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 import datetime
-from models.models import NewsTonal, NewsTonalDaily, NewsSource
+import pytz
+from models.models import NewsTonal, NewsTonalDaily, NewsSource, Pages
 
 
 class MainView(View):
     """CBV - base site with methods for all project."""
-
-    def get_additional_data(self, data):
-        """Get additional data from all project."""
-        data["sources"] = NewsSource.objects.all()
-        return data
 
     def get_stat_data(self, date, data, source, prefix):
         """Get statistics data for tonalities."""
@@ -65,9 +64,8 @@ class HomePageView(MainView):
     def get(self, request, *args, **kwargs):
         """Home page - get request."""
         data = {
-            "title": "Home page"
+            "title": _("Home page")
         }
-        data = self.get_additional_data(data)
         if request.user.is_authenticated:
             template_name = "home-login.html"
             today = datetime.date.today()
@@ -90,13 +88,12 @@ class SingleSourcePage(MainView):
     def get(self, request, *args, **kwargs):
         """Single source page - get request."""
         data = {
-            "title": "Single source",
+            "title": _("Single source"),
             "source_url": "",
             "source_id": "",
             "source_logo": "",
             "source_desc": ""
         }
-        data = self.get_additional_data(data)
         source = NewsSource.objects.get(pk=self.kwargs["id"])
         if source:
             data["title"] = source.name
@@ -123,7 +120,7 @@ class RESTAPIView(View):
         """REST API main request."""
         if "action" not in request.POST:
             return HttpResponseBadRequest(
-                "Invalid arguments."
+                _("Invalid arguments")
             )
         action = request.POST["action"]
         data = False
@@ -131,6 +128,8 @@ class RESTAPIView(View):
             data = self.tonalityGeneral(request)
         if action == "tonality_daily":
             data = self.tonalityDaily(request)
+        if action == "tonality_custom":
+            data = self.tonalityCustom(request)
         return JsonResponse({
             "data": data
         })
@@ -147,8 +146,10 @@ class RESTAPIView(View):
         today = datetime.date.today()
         if time == "yesterday":
             yesterday = today - datetime.timedelta(days=1)
+            time = datetime.datetime.now() - datetime.timedelta(days=1)
             objs = NewsTonal.objects.all().filter(
-                news_item__date__startswith=yesterday
+                news_item__date__startswith=yesterday,
+                news_item__date__lt=time
             )
         else:
             objs = NewsTonal.objects.all().filter(
@@ -159,7 +160,6 @@ class RESTAPIView(View):
                 news_item__source__id=source_id
             )
         for item in objs.order_by("-news_item__date")[:self.MAX_VAL][::-1]:
-            print(item.news_item.date)
             data.append({
                 "news_title": item.news_item.title,
                 "news_date": item.news_item.date,
@@ -182,3 +182,70 @@ class RESTAPIView(View):
                 "tonality_index": item.tonality_index
             })
         return data
+
+    def tonalityCustom(self, request):
+        """Return data for custom data range tonality."""
+        data = []
+        if "range" not in request.POST:
+            return HttpResponseBadRequest(
+                _("Date range doesn't provide")
+            )
+        range = request.POST["range"].split(" - ")
+        if len(range) < 2:
+            return HttpResponseBadRequest(
+                _("Invalid date range")
+            )
+        start_day = datetime.datetime.strptime(
+            range[0], "%Y-%m-%d %H:%M"
+        )
+        end_day = datetime.datetime.strptime(
+            range[1], "%Y-%m-%d %H:%M"
+        )
+        timezone = pytz.timezone(settings.TIME_ZONE)
+        start_day = timezone.localize(start_day)
+        end_day = timezone.localize(end_day)
+        objs = NewsTonal.objects.all().filter(
+            news_item__date__gt=start_day,
+            news_item__date__lt=end_day
+        )
+        for item in objs.order_by("-news_item__date")[:self.MAX_VAL][::-1]:
+            data.append({
+                "news_title": item.news_item.title,
+                "news_date": item.news_item.date,
+                "tonality": item.tonality,
+                "tonality_index": item.tonality_index
+            })
+        return data
+
+
+def page_about(request):
+    """View for about page."""
+    data = {
+        "title": _("About project"),
+        "text": ""
+    }
+    template_name = "page-about.html"
+    try:
+        about_page = Pages.objects.get(id=settings.ABOUT_PAGE_ID)
+        data["title"] = about_page.title
+        data["text"] = about_page.text
+    except ObjectDoesNotExist:
+        pass
+    return render(
+        request,
+        template_name,
+        data
+    )
+
+
+def page_custom_range(request):
+    """View for custom range page."""
+    data = {
+        "title": _("Tonality for custom date range")
+    }
+    template_name = "page-custom_range.html"
+    return render(
+        request,
+        template_name,
+        data
+    )
