@@ -208,7 +208,7 @@ class RESTAPIView(View):
             news_item__date__gt=start_day,
             news_item__date__lt=end_day
         )
-        for item in objs.order_by("-news_item__date")[:self.MAX_VAL][::-1]:
+        for item in objs.order_by("-news_item__date"):
             data.append({
                 "news_title": item.news_item.title,
                 "news_date": item.news_item.date,
