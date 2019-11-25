@@ -25,7 +25,7 @@ class HomePageView(View):
             data = self.get_data(today, data, "today")
             data = self.get_data(yesterday, data, "yesterday")
         else:
-            template_name = "home-anonimous.html"
+            template_name = "home-anonymous.html"
         return render(
             request,
             template_name,
