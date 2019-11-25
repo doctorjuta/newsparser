@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <nav class="navbar" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" href="{% url 'home_page' %}">NewsDetect</a>
@@ -12,17 +14,25 @@
     <div id="navbarBasicExample" class="navbar-menu">
         {% if user.is_authenticated %}
             <div class="navbar-start">
-                <a class="navbar-item" href="#">Item 1</a>
-                <a class="navbar-item" href="#">Item 2</a>
+                <a class="navbar-item" href="{% url 'custom_range' %}">{% trans "Custom range" %}</a>
+                <div class="navbar-item has-dropdown is-hoverable">
+                    <a class="navbar-link">{% trans "Sources" %}</a>
+                    <div class="navbar-dropdown">
+                        {% for source in sources %}
+                            <a class="navbar-item" href="{% url 'single_source' source.id  %}">{{ source.name }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+                <a class="navbar-item" href="{% url 'about' %}">{% trans "About" %}</a>
             </div>
         {% endif %}
         <div class="navbar-end">
             <div class="navbar-item">
                 <div class="buttons">
                     {% if user.is_authenticated %}
-                        <a class="button is-light" href="{% url 'logout' %}">Log out</a>
+                        <a class="button is-light" href="{% url 'logout' %}">{% trans "Log out" %}</a>
                     {% else %}
-                        <a class="button is-light" href="{% url 'login' %}">Log in</a>
+                        <a class="button is-light" href="{% url 'login' %}">{% trans "Log in" %}</a>
                     {% endif %}
                 </div>
             </div>

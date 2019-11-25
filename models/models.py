@@ -1,5 +1,6 @@
 """List of models for news parser."""
 from django.db import models
+from tinymce.models import HTMLField
 
 
 class NewsSource(models.Model):
@@ -10,7 +11,10 @@ class NewsSource(models.Model):
         ("default", "Default"),
         ("uapravda", "UA Pravda"),
         ("obozrevatel", "Obozrevatel"),
-        ("segodnya", "Segodnya")
+        ("segodnya", "Segodnya"),
+        ("ua24", "24 channel"),
+        ("rbc", "RBC"),
+        ("znaj", "Znaj")
     ]
 
     name = models.CharField(
@@ -20,6 +24,14 @@ class NewsSource(models.Model):
     url = models.URLField(
         "Source main page URL",
         max_length=200
+    )
+    desctiption = models.TextField(
+        "Desctiption",
+        default=""
+    )
+    logo = models.ImageField(
+        "Logo",
+        upload_to="logos/"
     )
     parser = models.CharField(
         "Parser",
@@ -149,3 +161,25 @@ class NewsTonalDaily(TonalityBase):
 
         verbose_name = "Daily tonality"
         verbose_name_plural = "Daily tonalities"
+
+
+class Pages(models.Model):
+    """Model for pages."""
+
+    title = models.CharField(
+        "Name",
+        max_length=200
+    )
+    text = HTMLField(
+        "Text"
+    )
+
+    def __str__(self):
+        """Models item representation."""
+        return "{}".format(self.title)
+
+    class Meta:
+        """Addition data for model."""
+
+        verbose_name = "Page"
+        verbose_name_plural = "Pages"

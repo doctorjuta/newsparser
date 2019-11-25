@@ -4,8 +4,8 @@
   "description": "",
   "main": "js/main.js",
   "scripts": {
-    "dev": "parcel watch js/main.js -d ../dist",
-    "build": "parcel build js/main.js -d ../dist"
+    "dev": "parcel watch js/main.js js/custom_range.js -d ../dist",
+    "build": "parcel build js/main.js js/custom_range.js -d ../dist"
   },
   "author": "Andrii Dutchak",
   "license": "ISC",
