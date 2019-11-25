@@ -53,3 +53,24 @@ body {
         }
     }
 }
+
+
+.header {
+    .logo {
+        svg {
+            display: block;
+            width: 64px;
+            height: 64px;
+            path {
+                will-change: fill;
+                -webkit-transition: fill .3s;
+                transition: fill .3s;
+            }
+            &:hover {
+                path {
+                    fill: #363636;
+                }
+            }
+        }
+    }
+}
