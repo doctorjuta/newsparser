@@ -130,6 +130,10 @@ class RESTAPIView(View):
             data = self.tonalityDaily(request)
         if action == "tonality_custom":
             data = self.tonalityCustom(request)
+        if data and "error" in data:
+            return HttpResponseBadRequest(
+                data["message"]
+            )
         return JsonResponse({
             "data": data
         })
@@ -187,14 +191,16 @@ class RESTAPIView(View):
         """Return data for custom data range tonality."""
         data = []
         if "range" not in request.POST:
-            return HttpResponseBadRequest(
-                _("Date range doesn't provide")
-            )
+            return {
+                "error": 1,
+                "message": _("Date range doesn't provide")
+            }
         range = request.POST["range"].split(" - ")
         if len(range) < 2:
-            return HttpResponseBadRequest(
-                _("Invalid date range")
-            )
+            return {
+                "error": 1,
+                "message": _("Invalid date range")
+            }
         start_day = datetime.datetime.strptime(
             range[0], "%Y-%m-%d %H:%M"
         )
@@ -204,17 +210,34 @@ class RESTAPIView(View):
         timezone = pytz.timezone(settings.TIME_ZONE)
         start_day = timezone.localize(start_day)
         end_day = timezone.localize(end_day)
+        range_dates = end_day - start_day
+        if (range_dates.days > 7):
+            return {
+                "error": 1,
+                "message": _("We provide data for maximum 7 days.")
+            }
         objs = NewsTonal.objects.all().filter(
             news_item__date__gt=start_day,
             news_item__date__lt=end_day
         )
+        max_val_in_single = round(len(objs)/self.MAX_VAL)
+        max_val_tonality = []
+        max_val_index = []
+        tmp_index = 1
         for item in objs.order_by("-news_item__date"):
-            data.append({
-                "news_title": item.news_item.title,
-                "news_date": item.news_item.date,
-                "tonality": item.tonality,
-                "tonality_index": item.tonality_index
-            })
+            max_val_tonality.append(item.tonality)
+            max_val_index.append(item.tonality_index)
+            tmp_index += 1
+            if tmp_index > max_val_in_single:
+                data.append({
+                    "news_title": item.news_item.title,
+                    "news_date": item.news_item.date,
+                    "tonality": round(sum(max_val_tonality)/len(max_val_tonality), 2),
+                    "tonality_index": round(sum(max_val_index)/len(max_val_index), 2)
+                })
+                max_val_tonality = []
+                max_val_index = []
+                tmp_index = 1
         return data
 
 

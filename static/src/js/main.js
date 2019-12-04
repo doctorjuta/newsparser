@@ -36,9 +36,20 @@ jQuery.noConflict();
             }
         }
 
+        function initNotifications() {
+            $("body").on("click", "button.delete", function() {
+                let mess = $(this).parent(".notification");
+                mess.animate({opacity: 0}, 500, function() {
+                    mess.remove();
+                });
+                return false;
+            });
+        }
+
         self.run = function() {
             initCharts();
             initNumberCouts();
+            initNotifications();
         }
 
     }
