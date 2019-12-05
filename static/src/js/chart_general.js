@@ -4,6 +4,7 @@ export default class ChartGeneral {
         this.obj = obj;
         this.charts_positive_color = "#00ff00";
         this.charts_negative_color = "#ff0000";
+        this.charts_neitral_color = "#4a4a4a";
     }
 
     requestStart() {

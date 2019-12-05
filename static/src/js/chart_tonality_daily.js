@@ -10,38 +10,29 @@ export default class ChartTonalityDaily extends ChartGeneral {
         let self = this;
         let chart_title = self.obj.attr("data-title");
         let chart_labels = [];
-        let data_positive = [];
-        let data_negative = [];
+        let data_vals = [];
         let count_val = data.length;
         for (let i=0;i<count_val;i++) {
             let it = data[i];
             let it_date = new Date(it["date"]);
             chart_labels.push(it_date.getMonth()+1 + "/" + it_date.getDate());
-            if (it["tonality_index"] >= 0) {
-                data_positive.push(it["tonality_index"]);
-                data_negative.push(0);
-            } else {
-                data_positive.push(0);
-                data_negative.push(it["tonality_index"]);
-            }
+            data_vals.push(it["tonality_index"]);
         }
         let ctx = self.obj[0].getContext("2d");
         let chart_options = {
-            type: "bar",
+            type: "line",
             data: {
                 labels: chart_labels,
                 datasets: [
                     {
-                        label: "Positive",
-                        data: data_positive,
-                        backgroundColor: self.charts_positive_color,
-                        barPercentage: 1.0
-                    },
-                    {
-                        label: "Negative",
-                        data: data_negative,
-                        backgroundColor: self.charts_negative_color,
-                        barPercentage: 1.0
+                        label: "Tonality",
+                        data: data_vals,
+                        borderColor: self.charts_neitral_color,
+                        barPercentage: 1.0,
+                        backgroundColor: "transparent",
+                        borderJoinStyle: "round",
+                        borderWidth: 2,
+                        lineTension: 0
                     }
                 ]
             },
@@ -52,12 +43,7 @@ export default class ChartTonalityDaily extends ChartGeneral {
                 legend: {
                     display: false
                 },
-				responsive: true,
-				scales: {
-					xAxes: [{
-						stacked: true,
-					}],
-				}
+				responsive: true
             }
         };
         if (chart_title != undefined) {

@@ -67,7 +67,7 @@ class HomePageView(MainView):
     def get(self, request, *args, **kwargs):
         """Home page - get request."""
         data = {
-            "title": _("Home page")
+            "title": "NewsDetect: аналізуємо тональність новин"
         }
         if request.user.is_authenticated:
             template_name = "home-login.html"
@@ -157,6 +157,8 @@ class RESTAPIView(View):
         if time == "yesterday":
             yesterday = today - datetime.timedelta(days=1)
             time = datetime.datetime.now() - datetime.timedelta(days=1)
+            timezone = pytz.timezone(settings.TIME_ZONE)
+            time = timezone.localize(time)
             objs = NewsTonal.objects.all().filter(
                 news_item__date__startswith=yesterday,
                 news_item__date__lt=time

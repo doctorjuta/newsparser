@@ -5,7 +5,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
-        <title>{% block title %}News tonality projecct{% endblock %}</title>
+        <title>{% block title %}NewsDetect: аналізуємо тональність новин{% endblock %}</title>
         <link rel="stylesheet" href="{% static 'dist/main.css' %}">
         {% block custom_css %}{% endblock %}
         <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
@@ -13,7 +13,7 @@
             const rest_url = "{% url 'rest_api' %}";
         </script>
     </head>
-    <body>
+    <body class="fixed-header">
         {% include 'elements/header.html' %}
         {% block content %}{% endblock %}
         {% include 'elements/footer.html' %}

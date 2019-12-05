@@ -1,51 +1,48 @@
 {% extends "base.html" %}
-{% load i18n %}
 
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <section class="hero home_top is-large">
+    <section class="hero home_top">
         <div class="hero-body">
             <div class="container">
-                <h1 class="title">{% trans "Hi, we analyze news" %}</h1>
-                <h2 class="subtitle">{% trans "Really, it's not such difficult as you can expect" %}</h2>
+                <h1 class="title home_top_title">Тональність українських новин</h1>
+                <h2 class="subtitle home_top_subtitle">Як висвітлюють сьогодення</h2>
+                <div class="home_top_stats">
+                    <p class="title is-4 has-text-centered">За останні 24 години ми виявили:</p>
+                    <div class="level">
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">Позитивних новин</p>
+                                <p class="title"><span id="dnmc_number1" class="dnmc_number" data-targ="{{ last24_count_positive }}">0</span></p>
+                            </div>
+                        </div>
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">Негативних новин</p>
+                                <p class="title"><span id="dnmc_number2" class="dnmc_number" data-targ="{{ last24_count_negative }}">0</span></p>
+                            </div>
+                        </div>
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">Нейтральних новин</p>
+                                <p class="title"><span id="dnmc_number3" class="dnmc_number" data-targ="{{ last24_count_neutral }}">0</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
-    <section class="section is-medium">
+    <section class="section section-shadow is-medium">
         <div class="container">
-            <p class="title is-4 has-text-centered">{% trans "For the last 24 hours we found" %}:</p>
-            <div class="level">
-                <div class="level-item has-text-centered">
-                    <div>
-                        <p class="heading">{% trans "Positive news" %}</p>
-                        <p class="title"><span id="dnmc_number1" class="dnmc_number" data-targ="{{ last24_count_positive }}">0</span></p>
-                    </div>
-                </div>
-                <div class="level-item has-text-centered">
-                    <div>
-                        <p class="heading">{% trans "Negative news" %}</p>
-                        <p class="title"><span id="dnmc_number2" class="dnmc_number" data-targ="{{ last24_count_negative }}">0</span></p>
-                    </div>
-                </div>
-                <div class="level-item has-text-centered">
-                    <div>
-                        <p class="heading">{% trans "Neutral news" %}</p>
-                        <p class="title"><span id="dnmc_number3" class="dnmc_number" data-targ="{{ last24_count_neutral }}">0</span></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="section is-medium">
-        <div class="container">
-            <p class="title is-4 has-text-centered">{% trans "Daily tonality for last 30 days" %}:</p>
+            <p class="title is-4 has-text-centered">Тональність новин за останні 30 днів:</p>
             <canvas id="tonality-graph-dayli" class="chart chart_tonality_daily"></canvas>
         </div>
     </section>
-    <section class="section is-medium">
+    <section class="section section-shadow is-medium">
         <div class="container">
-            <p>Full content availible only for login users.</p>
+            <p class="title is-4 has-text-centered">Решту даних доступні зареєстрованим користувачам.</p>
         </div>
     </section>
 {% endblock %}
