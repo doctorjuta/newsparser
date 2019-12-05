@@ -26,7 +26,7 @@ export default class ChartTonalityDaily extends ChartGeneral {
             }
         }
         let ctx = self.obj[0].getContext("2d");
-        let chart = new Chart(ctx, {
+        let chart_options = {
             type: "bar",
             data: {
                 labels: chart_labels,
@@ -47,8 +47,7 @@ export default class ChartTonalityDaily extends ChartGeneral {
             },
             options: {
                 title: {
-                    display: true,
-                    text: chart_title
+                    display: false
                 },
                 legend: {
                     display: false
@@ -60,7 +59,14 @@ export default class ChartTonalityDaily extends ChartGeneral {
 					}],
 				}
             }
-        });
+        };
+        if (chart_title != undefined) {
+            chart_options.options.title = {
+                display: true,
+                text: chart_title
+            };
+        }
+        let chart = new Chart(ctx, chart_options);
     }
 
     init() {

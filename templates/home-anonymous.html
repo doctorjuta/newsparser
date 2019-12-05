@@ -4,13 +4,48 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
-    <section class="section">
-        <div class="container">
-            <h1 class="title is-2 has-text-centered">{% trans "Welcome to NewsDetect project" %}</h1>
-            <canvas id="tonality-graph-dayli" class="chart chart_tonality_daily" data-title="{% trans 'Last daily tonality (30 days)' %}"></canvas>
-            <div class="content">
-                <p>Full content availible only for login users.</p>
+    <section class="hero home_top is-large">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title">{% trans "Hi, we analyze news" %}</h1>
+                <h2 class="subtitle">{% trans "Really, it's not such difficult as you can expect" %}</h2>
             </div>
+        </div>
+    </section>
+    <section class="section is-medium">
+        <div class="container">
+            <p class="title is-4 has-text-centered">{% trans "For the last 24 hours we found" %}:</p>
+            <div class="level">
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">{% trans "Positive news" %}</p>
+                        <p class="title"><span id="dnmc_number1" class="dnmc_number" data-targ="{{ last24_count_positive }}">0</span></p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">{% trans "Negative news" %}</p>
+                        <p class="title"><span id="dnmc_number2" class="dnmc_number" data-targ="{{ last24_count_negative }}">0</span></p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">{% trans "Neutral news" %}</p>
+                        <p class="title"><span id="dnmc_number3" class="dnmc_number" data-targ="{{ last24_count_neutral }}">0</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section is-medium">
+        <div class="container">
+            <p class="title is-4 has-text-centered">{% trans "Daily tonality for last 30 days" %}:</p>
+            <canvas id="tonality-graph-dayli" class="chart chart_tonality_daily"></canvas>
+        </div>
+    </section>
+    <section class="section is-medium">
+        <div class="container">
+            <p>Full content availible only for login users.</p>
         </div>
     </section>
 {% endblock %}

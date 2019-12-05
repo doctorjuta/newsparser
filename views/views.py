@@ -21,15 +21,18 @@ class MainView(View):
         positive = 0
         negative = 0
         neutral = 0
-        if source:
-            all = NewsTonal.objects.all().filter(
-                news_item__date__startswith=date,
-                news_item__source=source
-            )
+        filters = {}
+        if isinstance(date, datetime.datetime):
+            filters["news_item__date__gt"] = date
         else:
-            all = NewsTonal.objects.all().filter(
-                news_item__date__startswith=date
-            )
+            filters["news_item__date__startswith"] = date
+        if source:
+            filters["news_item__source"] = source
+        all = NewsTonal.objects.all().filter(
+            **filters
+        ).order_by(
+            "news_item__date"
+        )
         avarage = 0
         max_val = 0
         min_val = 0
@@ -73,6 +76,9 @@ class HomePageView(MainView):
             data = self.get_stat_data(today, data, False, "today")
             data = self.get_stat_data(yesterday, data, False, "yesterday")
         else:
+            today_dt = datetime.datetime.today()
+            yesterday_dt = today_dt - datetime.timedelta(days=1)
+            data = self.get_stat_data(yesterday_dt, data, False, "last24")
             template_name = "home-anonymous.html"
         return render(
             request,
