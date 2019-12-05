@@ -20,6 +20,7 @@ body {
         top: 0;
         left: 0;
         z-index: 100;
+        background: rgba(255, 255, 255, .5);
     }
     &::after {
         content: '\e830';
@@ -30,6 +31,7 @@ body {
         -webkit-animation: spin 1s linear infinite;
         -moz-animation: spin 1s linear infinite;
         animation: spin 1s linear infinite;
+        z-index: 101;
     }
 }
 
@@ -43,6 +45,11 @@ body {
             }
         }
     }
+    &_tonality {
+        &_custom {
+            min-height: 570px;
+        }
+    }
 }
 
 
@@ -50,6 +57,9 @@ body {
     &_range {
         &_control {
             min-width: 320px;
+        }
+        &_form {
+            margin-bottom: 2rem;
         }
     }
 }

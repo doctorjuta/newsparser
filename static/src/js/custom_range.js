@@ -16,7 +16,8 @@ jQuery.noConflict();
 
         initCharts() {
             let self = this;
-            self.rend.click(function() {
+            self.rend.click(function(e) {
+                e.preventDefault();
                 let param = {
                     action: "tonality_custom",
                     range: self.sel.val()
@@ -37,8 +38,7 @@ jQuery.noConflict();
                         self.requestEnd();
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        let errorMessage = "Projects error: " + errorThrown + " URL: " + window.location.href;
-                        self.requestError(errorMessage);
+                        self.requestError(jqXHR.responseText);
                     },
                     success: function(resp, textStatus, jqXHR) {
                         self.renderChart(resp.data);
