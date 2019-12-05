@@ -4,7 +4,6 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views import View
 from django.http import JsonResponse, HttpResponseBadRequest
-from django.utils import timezone
 from django.utils.translation import gettext as _
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
@@ -69,15 +68,16 @@ class HomePageView(MainView):
         data = {
             "title": "NewsDetect: аналізуємо тональність новин"
         }
+        tz = pytz.timezone(settings.TIME_ZONE)
         if request.user.is_authenticated:
             template_name = "home-login.html"
             today = datetime.date.today()
-            yesterday = today - datetime.timedelta(days=1)
+            yesterday = today-datetime.timedelta(days=1)
             data = self.get_stat_data(today, data, False, "today")
             data = self.get_stat_data(yesterday, data, False, "yesterday")
         else:
-            today_dt = datetime.datetime.today()
-            yesterday_dt = today_dt - datetime.timedelta(days=1)
+            today_dt = tz.localize(datetime.datetime.today())
+            yesterday_dt = today_dt-datetime.timedelta(days=1)
             data = self.get_stat_data(yesterday_dt, data, False, "last24")
             template_name = "home-anonymous.html"
         return render(
@@ -157,8 +157,8 @@ class RESTAPIView(View):
         if time == "yesterday":
             yesterday = today - datetime.timedelta(days=1)
             time = datetime.datetime.now() - datetime.timedelta(days=1)
-            timezone = pytz.timezone(settings.TIME_ZONE)
-            time = timezone.localize(time)
+            tz = pytz.timezone(settings.TIME_ZONE)
+            time = tz.localize(time)
             objs = NewsTonal.objects.all().filter(
                 news_item__date__startswith=yesterday,
                 news_item__date__lt=time
@@ -183,7 +183,9 @@ class RESTAPIView(View):
     def tonalityDaily(self, request):
         """Return data for tonality dailty charts."""
         data = []
-        start_day = timezone.now() - datetime.timedelta(days=30)
+        start_day = datetime.datetime.now() - datetime.timedelta(days=30)
+        tz = pytz.timezone(settings.TIME_ZONE)
+        start_day = tz.localize(start_day)
         last_daily_tonality = NewsTonalDaily.objects.all().filter(
             date__gte=start_day
         ).order_by("date")
@@ -215,9 +217,9 @@ class RESTAPIView(View):
         end_day = datetime.datetime.strptime(
             range[1], "%Y-%m-%d %H:%M"
         )
-        timezone = pytz.timezone(settings.TIME_ZONE)
-        start_day = timezone.localize(start_day)
-        end_day = timezone.localize(end_day)
+        tz = pytz.timezone(settings.TIME_ZONE)
+        start_day = tz.localize(start_day)
+        end_day = tz.localize(end_day)
         range_dates = end_day - start_day
         if (range_dates.days > 7):
             return {
@@ -240,8 +242,12 @@ class RESTAPIView(View):
                 data.append({
                     "news_title": item.news_item.title,
                     "news_date": item.news_item.date,
-                    "tonality": round(sum(max_val_tonality)/len(max_val_tonality), 2),
-                    "tonality_index": round(sum(max_val_index)/len(max_val_index), 2)
+                    "tonality": round(
+                        sum(max_val_tonality)/len(max_val_tonality), 2
+                    ),
+                    "tonality_index": round(
+                        sum(max_val_index)/len(max_val_index), 2
+                    )
                 })
                 max_val_tonality = []
                 max_val_index = []
