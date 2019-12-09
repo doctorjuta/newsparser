@@ -60,10 +60,6 @@ export default class ChartTonalityGeneral extends ChartGeneral {
 					}],
 					yAxes: [{
 						stacked: true,
-                        ticks: {
-                            suggestedMin: 10,
-                            suggestedMax: 10
-                        }
 					}]
 				}
             }

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ site_title }}{% endblock %}
 
 {% block content %}
     <section class="hero home_top">
@@ -36,13 +36,13 @@
     </section>
     <section class="section section-shadow is-medium">
         <div class="container">
-            <p class="title is-4 has-text-centered">Тональність новин за останні 30 днів:</p>
+            <p class="title is-4 has-text-centered ptitle">Тональність новин за останні 30 днів:</p>
             <canvas id="tonality-graph-dayli" class="chart chart_tonality_daily"></canvas>
         </div>
     </section>
     <section class="section section-shadow is-medium">
         <div class="container">
-            <p class="title is-4 has-text-centered">Решту даних доступні зареєстрованим користувачам.</p>
+            <p class="title is-4 has-text-centered ptitle">Решту даних доступні зареєстрованим користувачам.</p>
         </div>
     </section>
 {% endblock %}

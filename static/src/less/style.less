@@ -77,6 +77,9 @@ body {
     z-index: 5;
     .navbar {
         box-shadow: 0 -5px 25px rgba(0, 0, 0, .5);
+        &-menu {
+            padding-left: 260px;
+        }
     }
     .logo {
         svg {
@@ -90,7 +93,7 @@ body {
             }
             &:hover {
                 path {
-                    fill: #363636;
+                    fill: #520000;
                 }
             }
         }
@@ -101,6 +104,9 @@ body {
 .section {
     &-shadow {
         box-shadow: 0 25px 25px rgba(0, 0, 0, 0.05);
+    }
+    &-fullheight {
+        min-height: ~"calc(100vh - 168px)";
     }
 }
 
@@ -144,6 +150,86 @@ body {
             margin: 3rem auto 0 auto;
             z-index: 2;
             box-shadow: 0 7px 15px #656869;
+            border-left: 6px solid #ff2500;
+        }
+    }
+}
+
+.ptitle {
+    text-transform: uppercase;
+    position: relative;
+    &::before {
+        content: "";
+        width: 200px;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -100px;
+        margin-top: 10px;
+        height: 1px;
+        background: #ff2500;
+    }
+}
+
+.input,
+.textarea,
+.button {
+    .rounded(0px);
+}
+
+.logo {
+    &:focus,
+    &:hover {
+        span {
+            color: #4a4a4a;
+        }
+    }
+    &-text {
+        position: absolute;
+        left: 90%;
+        font-size: 4rem;
+        letter-spacing: -.1em;
+        line-height: 1;
+    }
+}
+
+.button {
+    &.is-nd {
+        color: #fff;
+        background: #c70000;
+        border: none;
+        will-change: background;
+        -webkit-transition: background .3s;
+        transition: background .3s;
+        &:hover {
+            background: #520000;
+        }
+    }
+}
+
+.footer {
+    background: #520000;
+    color: #fff;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.login {
+    &-form {
+        max-width: 320px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    &-text {
+        max-width: 768px;
+        margin: 4rem auto;
+    }
+}
+
+.content {
+    p {
+        a {
+            color: #ff2500;
         }
     }
 }

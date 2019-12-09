@@ -101,10 +101,6 @@ jQuery.noConflict();
     					}],
     					yAxes: [{
     						stacked: true,
-                            ticks: {
-                                suggestedMin: 10,
-                                suggestedMax: 10
-                            }
     					}]
     				}
                 }

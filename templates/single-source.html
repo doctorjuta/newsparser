@@ -1,12 +1,11 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{{ title }} | {% trans "single page" %}{% endblock %}
+{% block title %}{{ site_name }} | сторінка джерела {{ title }}{% endblock %}
 
 {% block content %}
     <section class="section is-medium">
         <div class="container">
-            <h1 class="title is-2 has-text-centered">{{ title }}</h1>
+            <p class="title is-4 has-text-centered ptitle">{{ title }}</p>
             <div class="columns">
                 <div class="column is-2">
                     <figure class="image is-128x128">
@@ -23,25 +22,25 @@
     </section>
     <section class="section">
         <div class="container">
-            <p class="title is-3 has-text-centered">{% trans "Tonality today" %} - {{ title }}</p>
-            <canvas id="tonality-graph-today" class="chart chart_tonality_general" data-time="today" data-source="{{ source_id }}" data-title="{% trans 'Last tonality (200 vals)' %}"></canvas>
+            <p class="title is-4 has-text-centered ptitle">Тональність джерела за сьогодні</p>
+            <canvas id="tonality-graph-today" class="chart chart_tonality_general" data-time="today" data-source="{{ source_id }}" data-title="Останні 200 значень"></canvas>
             <div class="chart_addtext">
                 <div class="level">
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Positive news" %}</p>
+                            <p class="heading">Позитивних новин</p>
                             <p class="title"><span id="dnmc_number1" class="dnmc_number" data-targ="{{ today_count_positive }}">0</span></p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Negative news" %}</p>
+                            <p class="heading">Негативних новин</p>
                             <p class="title"><span id="dnmc_number2" class="dnmc_number" data-targ="{{ today_count_negative }}">0</span></p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Neutral news" %}</p>
+                            <p class="heading">Нейтральних новин</p>
                             <p class="title"><span id="dnmc_number3" class="dnmc_number" data-targ="{{ today_count_neutral }}">0</span></p>
                         </div>
                     </div>
@@ -49,19 +48,19 @@
                 <div class="level">
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Max positive" %}</p>
+                            <p class="heading">Максимальний позитивний індекс</p>
                             <p class="title">{{ today_max_val }}</p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Max negative" %}</p>
+                            <p class="heading">Максимальний негативний індекс</p>
                             <p class="title">{{ today_min_val }}</p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Avarage val" %}</p>
+                            <p class="heading">Середнє значення індексу</p>
                             <p class="title">{{ today_avarage_val }}</p>
                         </div>
                     </div>

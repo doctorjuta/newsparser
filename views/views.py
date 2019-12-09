@@ -65,9 +65,7 @@ class HomePageView(MainView):
     @method_decorator(ensure_csrf_cookie)
     def get(self, request, *args, **kwargs):
         """Home page - get request."""
-        data = {
-            "title": "NewsDetect: аналізуємо тональність новин"
-        }
+        data = {}
         tz = pytz.timezone(settings.TIME_ZONE)
         if request.user.is_authenticated:
             template_name = "home-login.html"
@@ -278,7 +276,7 @@ def page_about(request):
 def page_custom_range(request):
     """View for custom range page."""
     data = {
-        "title": _("Tonality for custom date range")
+        "title": "Тональність за обраний період часу"
     }
     template_name = "page-custom_range.html"
     return render(
