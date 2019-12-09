@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}{{ site_title }}{% endblock %}
+
+{% block content %}
+    <section class="hero home_top">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title home_top_title">Тональність українських новин</h1>
+                <h2 class="subtitle home_top_subtitle">Як висвітлюють сьогодення</h2>
+                <div class="home_top_stats">
+                    <p class="title is-4 has-text-centered">За останні 24 години ми виявили:</p>
+                    <div class="level">
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">Позитивних новин</p>
+                                <p class="title"><span id="dnmc_number1" class="dnmc_number" data-targ="{{ last24_count_positive }}">0</span></p>
+                            </div>
+                        </div>
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">Негативних новин</p>
+                                <p class="title"><span id="dnmc_number2" class="dnmc_number" data-targ="{{ last24_count_negative }}">0</span></p>
+                            </div>
+                        </div>
+                        <div class="level-item has-text-centered">
+                            <div>
+                                <p class="heading">Нейтральних новин</p>
+                                <p class="title"><span id="dnmc_number3" class="dnmc_number" data-targ="{{ last24_count_neutral }}">0</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section section-shadow is-medium">
+        <div class="container">
+            <p class="title is-4 has-text-centered ptitle">Тональність новин за останні 30 днів:</p>
+            <canvas id="tonality-graph-dayli" class="chart chart_tonality_daily"></canvas>
+        </div>
+    </section>
+    <section class="section section-shadow is-medium">
+        <div class="container">
+            <p class="title is-4 has-text-centered ptitle">Решту даних доступні зареєстрованим користувачам.</p>
+        </div>
+    </section>
+{% endblock %}

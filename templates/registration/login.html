@@ -4,9 +4,17 @@
 {% block title %}{% trans "Login" %}{% endblock %}
 
 {% block content %}
-    <section class="section">
+    <section class="section section-fullheight">
         <div class="container">
-            {% include "registration/login_form.html" %}
+            <div class="login-form">
+                {% include "registration/login_form.html" %}
+            </div>
+            <div class="login-text">
+                <div class="content">
+                    <p>Наразі проект працює в тестовому режимі і повний функціонал доступний тільки обмеженому числу користувачів. В найближчому майбутньому ми обов'язково зробимо реєстрацію та, відповідно, весь функціонал, доступними для усіх.</p>
+                    <p>Якщо ви хочете отримати доступ до ранньої версії проекту та взяти участь в тестуванні усього функціоналу - напишіть нам на скриньку uaintertech@gmail.com.</p>
+                </div>
+            </div>
         </div>
     </section>
 {% endblock %}

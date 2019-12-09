@@ -7,6 +7,10 @@
 
 body {
     background: #fff;
+    font-family: 'Roboto Condensed', sans-serif;
+    &.fixed-header {
+        padding-top: 80px;
+    }
 }
 
 .loading {
@@ -20,6 +24,7 @@ body {
         top: 0;
         left: 0;
         z-index: 100;
+        background: rgba(255, 255, 255, .5);
     }
     &::after {
         content: '\e830';
@@ -30,6 +35,7 @@ body {
         -webkit-animation: spin 1s linear infinite;
         -moz-animation: spin 1s linear infinite;
         animation: spin 1s linear infinite;
+        z-index: 101;
     }
 }
 
@@ -43,6 +49,11 @@ body {
             }
         }
     }
+    &_tonality {
+        &_custom {
+            min-height: 570px;
+        }
+    }
 }
 
 
@@ -50,6 +61,175 @@ body {
     &_range {
         &_control {
             min-width: 320px;
+        }
+        &_form {
+            margin-bottom: 2rem;
+        }
+    }
+}
+
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 5;
+    .navbar {
+        box-shadow: 0 -5px 25px rgba(0, 0, 0, .5);
+        &-menu {
+            padding-left: 260px;
+        }
+    }
+    .logo {
+        svg {
+            display: block;
+            width: 64px;
+            height: 64px;
+            path {
+                will-change: fill;
+                -webkit-transition: fill .3s;
+                transition: fill .3s;
+            }
+            &:hover {
+                path {
+                    fill: #520000;
+                }
+            }
+        }
+    }
+}
+
+
+.section {
+    &-shadow {
+        box-shadow: 0 25px 25px rgba(0, 0, 0, 0.05);
+    }
+    &-fullheight {
+        min-height: ~"calc(100vh - 168px)";
+    }
+}
+
+
+.home {
+    &_top {
+        background: #c8b4ba url("../img/top.jpg") no-repeat 50% 50%;
+        background-size: cover;
+        position: relative;
+        overflow: hidden;
+        height: ~"calc(100vh - 80px)";
+        .hero-body {
+            .flex-display(flex);
+            .align-items(center);
+            background: rgba(255, 255, 255, .25);
+        }
+        &_title {
+            text-shadow: 0 7px 8.896px #7a898e, 0 -2px 1px #fff;
+            text-transform: uppercase;
+            font-size: 4rem;
+            letter-spacing: -0.05em;
+            color: #f9eff2;
+            text-align: center;
+        }
+        &_subtitle {
+            color: #f9eff2;
+            text-transform: uppercase;
+            font-size: 36px;
+            font-weight: 700;
+            text-shadow: 0 7px 8.896px #7a898e, 0 -1px 1px #fff;
+            text-align: center;
+        }
+        &_stats {
+            width: 550px;
+            background: rgb(255,255,255);
+            background: -moz-linear-gradient(top,  rgb(255,255,255) 0%, rgb(255,255,255) 34%, rgb(241,241,241) 100%);
+            background: -webkit-linear-gradient(top,  rgb(255,255,255) 0%,rgb(255,255,255) 34%,rgb(241,241,241) 100%);
+            background: linear-gradient(to bottom,  rgb(255,255,255) 0%,rgb(255,255,255) 34%,rgb(241,241,241) 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f1f1f1',GradientType=0 );
+            padding: 3rem;
+            margin: 3rem auto 0 auto;
+            z-index: 2;
+            box-shadow: 0 7px 15px #656869;
+            border-left: 6px solid #ff2500;
+        }
+    }
+}
+
+.ptitle {
+    text-transform: uppercase;
+    position: relative;
+    &::before {
+        content: "";
+        width: 200px;
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        margin-left: -100px;
+        margin-top: 10px;
+        height: 1px;
+        background: #ff2500;
+    }
+}
+
+.input,
+.textarea,
+.button {
+    .rounded(0px);
+}
+
+.logo {
+    &:focus,
+    &:hover {
+        span {
+            color: #4a4a4a;
+        }
+    }
+    &-text {
+        position: absolute;
+        left: 90%;
+        font-size: 4rem;
+        letter-spacing: -.1em;
+        line-height: 1;
+    }
+}
+
+.button {
+    &.is-nd {
+        color: #fff;
+        background: #c70000;
+        border: none;
+        will-change: background;
+        -webkit-transition: background .3s;
+        transition: background .3s;
+        &:hover {
+            background: #520000;
+        }
+    }
+}
+
+.footer {
+    background: #520000;
+    color: #fff;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+.login {
+    &-form {
+        max-width: 320px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    &-text {
+        max-width: 768px;
+        margin: 4rem auto;
+    }
+}
+
+.content {
+    p {
+        a {
+            color: #ff2500;
         }
     }
 }

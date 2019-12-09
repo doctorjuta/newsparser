@@ -63,7 +63,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
-                'views.context_processor.menu_items'
+                'views.context_processor.addition_template_data'
             ],
         },
     },
@@ -104,7 +104,7 @@ LOGOUT_REDIRECT_URL = "/"
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "uk"
 TIME_ZONE = "UTC"
 USE_I18N = True
 USE_L10N = True

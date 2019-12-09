@@ -1,25 +1,26 @@
 {% extends "base.html" %}
 {% load static %}
-{% load i18n %}
 
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
     <section class="section">
         <div class="container">
-            <h1 class="title is-2 has-text-centered">{{ title }}</h1>
-            <form action="{% url 'custom_range' %}" method="post" class="custom_range_form">
-                <label class="label" for="custom_date_range_select">{% trans "Date range" %}</label>
-                <div class="field has-addons">
-                    <div class="control custom_range_control">
-                        <input class="input" type="text" name="daterange" id="custom_date_range_select" />
+            <p class="title is-4 has-text-centered ptitle">{{ title }}</p>
+            <div class="loading_wrapper">
+                <form action="{% url 'custom_range' %}" method="post" class="custom_range_form">
+                    <label class="label" for="custom_date_range_select">Часовий період</label>
+                    <div class="field has-addons">
+                        <div class="control custom_range_control">
+                            <input class="input" type="text" name="daterange" id="custom_date_range_select" />
+                        </div>
+                        <div class="control">
+                            <button type="button" class="button is-nd" id="custom_date_range_render">Надіслати</button>
+                        </div>
                     </div>
-                    <div class="control">
-                        <button type="button" class="button is-info" id="custom_date_range_render">{% trans "Render" %}</button>
-                    </div>
-                </div>
-            </form>
-            <canvas id="tonality-graph-custom" class="chart chart_tonality_custom" data-title="{{ title }}"></canvas>
+                </form>
+                <canvas id="tonality-graph-custom" class="chart chart_tonality_custom" data-title="{{ title }}"></canvas>
+            </div>
         </div>
     </section>
 {% endblock %}

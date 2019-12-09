@@ -1,31 +1,29 @@
 {% extends "base.html" %}
-{% load i18n %}
 
-{% block title %}{{ title }}{% endblock %}
+{% block title %}{{ site_title }}{% endblock %}
 
 {% block content %}
     <section class="section">
         <div class="container">
-            <h1 class="title is-2 has-text-centered">{% trans "Tonality" %}</h1>
-            <p class="title is-3 has-text-centered">{% trans "Tonality today" %}</p>
-            <canvas id="tonality-graph-today" class="chart chart_tonality_general" data-time="today" data-title="{% trans 'Last tonality (200 vals)' %}"></canvas>
+            <p class="title is-4 has-text-centered ptitle">Тональність сьогодні</p>
+            <canvas id="tonality-graph-today" class="chart chart_tonality_general" data-time="today" data-title="Останні 200 значень"></canvas>
             <div class="chart_addtext">
                 <div class="level">
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Positive news" %}</p>
+                            <p class="heading">Позитивних новин</p>
                             <p class="title"><span id="dnmc_number1" class="dnmc_number" data-targ="{{ today_count_positive }}">0</span></p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Negative news" %}</p>
+                            <p class="heading">Негативних новин</p>
                             <p class="title"><span id="dnmc_number2" class="dnmc_number" data-targ="{{ today_count_negative }}">0</span></p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Neutral news" %}</p>
+                            <p class="heading">Нейтральних новин</p>
                             <p class="title"><span id="dnmc_number3" class="dnmc_number" data-targ="{{ today_count_neutral }}">0</span></p>
                         </div>
                     </div>
@@ -33,19 +31,19 @@
                 <div class="level">
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Max positive" %}</p>
+                            <p class="heading">Максимальний позитивний індекс</p>
                             <p class="title">{{ today_max_val }}</p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Max negative" %}</p>
+                            <p class="heading">Максимальний негативний індекс</p>
                             <p class="title">{{ today_min_val }}</p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Avarage val" %}</p>
+                            <p class="heading">Середнє значення індексу</p>
                             <p class="title">{{ today_avarage_val }}</p>
                         </div>
                     </div>
@@ -55,25 +53,25 @@
     </section>
     <section class="section">
         <div class="container">
-            <p class="title is-3 has-text-centered">{% trans "Tonality yesterday" %}</p>
-            <canvas id="tonality-graph-yesterday" class="chart chart_tonality_general" data-time="yesterday" data-title="{% trans 'Last tonality (200 vals)' %}"></canvas>
+            <p class="title is-4 has-text-centered ptitle">Тональність вчора</p>
+            <canvas id="tonality-graph-yesterday" class="chart chart_tonality_general" data-time="yesterday" data-title="Останні 200 значень"></canvas>
             <div class="chart_addtext">
                 <div class="level">
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Positive news" %}</p>
+                            <p class="heading">Позитивних новин</p>
                             <p class="title"><span id="dnmc_number4" class="dnmc_number" data-targ="{{ yesterday_count_positive }}">0</span></p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Negative news" %}</p>
+                            <p class="heading">Негативних новин</p>
                             <p class="title"><span id="dnmc_number5" class="dnmc_number" data-targ="{{ yesterday_count_negative }}">0</span></p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Neutral news" %}</p>
+                            <p class="heading">Нейтральних новин</p>
                             <p class="title"><span id="dnmc_number6" class="dnmc_number" data-targ="{{ yesterday_count_neutral }}">0</span></p>
                         </div>
                     </div>
@@ -81,19 +79,19 @@
                 <div class="level">
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Max positive" %}</p>
+                            <p class="heading">Максимальний позитивний індекс</p>
                             <p class="title">{{ yesterday_max_val }}</p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Max negative" %}</p>
+                            <p class="heading">Максимальний негативний індекс</p>
                             <p class="title">{{ yesterday_min_val }}</p>
                         </div>
                     </div>
                     <div class="level-item has-text-centered">
                         <div>
-                            <p class="heading">{% trans "Avarage val" %}</p>
+                            <p class="heading">Середнє значення індексу</p>
                             <p class="title">{{ yesterday_avarage_val }}</p>
                         </div>
                     </div>
