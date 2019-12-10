@@ -46,10 +46,30 @@ jQuery.noConflict();
             });
         }
 
+        function initHeader() {
+            let lastScrollTop = 0;
+            $(window).scroll(function(event) {
+                let st = $(this).scrollTop();
+                if (st > lastScrollTop){
+                    body.removeClass("scroll-up").addClass("scroll-down");
+                } else {
+                    body.removeClass("scroll-down").addClass("scroll-up");
+                }
+                lastScrollTop = st;
+            });
+            $("#top-menu-toggle").click(function(e) {
+                e.preventDefault();
+                $("#top-menu, #top-menu-toggle").toggleClass("is-active");
+                $("header .logo").toggleClass("menu-open");
+                body.toggleClass("menu-open");
+            });
+        }
+
         self.run = function() {
             initCharts();
             initNumberCouts();
             initNotifications();
+            initHeader();
         }
 
     }
