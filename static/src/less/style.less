@@ -328,16 +328,7 @@ body {
 
 @media only screen and (max-width: 768px) {
     body {
-        &::after {
-            content: "";
-            width: 100%;
-            height: 100px;
-            position: fixed;
-            top: 100%;
-            left: 0;
-            background: url("../img/footer-bg.svg") no-repeat 50% 0%;
-            background-size: 1000px;
-        }
+        overflow: hidden;
     }
     #top-menu {
         &.is-active {
@@ -376,6 +367,20 @@ body {
         &-image {
             margin-left: auto;
             margin-right: auto;
+        }
+    }
+    footer {
+        position: relative;
+        height: 88px;
+        &::after {
+            content: "";
+            width: 100%;
+            height: 100px;
+            position: absolute;
+            top: 98%;
+            left: 0;
+            background: url("../img/footer-bg.svg") no-repeat 50% 0%;
+            background-size: 1000px;
         }
     }
 }
