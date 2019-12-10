@@ -1,13 +1,13 @@
 {% load widget_tweaks %}
 
 {% if form.errors %}
-    {% include "messages/error.html" with text="Your username and password didn't match. Please try again." %}
+    {% include "messages/error.html" with text="Логін та пароль що ви ввели не збігається. Спробуйте ще раз." %}
 {% endif %}
 {% if next %}
     {% if user.is_authenticated %}
-        {% include "messages/error.html" with text="Your account doesn't have access to this page. To proceed, please login with an account that has access." %}
+        {% include "messages/error.html" with text="Ви не маєте доступу до цієї сторінки." %}
     {% else %}
-        {% include "messages/error.html" with text="Please login to see this page." %}
+        {% include "messages/error.html" with text="Увійдіть щоб переглянути цю сторінку." %}
     {% endif %}
 {% endif %}
 <form method="post" action="{% url 'login' %}">

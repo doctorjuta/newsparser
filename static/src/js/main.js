@@ -39,7 +39,7 @@ jQuery.noConflict();
 
         function initNotifications() {
             $("body").on("click", "button.delete", function() {
-                let mess = $(this).parent(".notification");
+                let mess = $(this).closest(".message");
                 mess.animate({opacity: 0}, 500, function() {
                     mess.remove();
                 });
@@ -52,6 +52,7 @@ jQuery.noConflict();
             $(window).scroll(function(event) {
                 let st = $(this).scrollTop();
                 if (st < 80) {
+                    body.removeClass("scroll-up").removeClass("scroll-down");
                     return;
                 }
                 if (st > lastScrollTop){

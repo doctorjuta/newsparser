@@ -134,6 +134,8 @@ class RESTAPIView(View):
             data = self.tonalityDaily(request)
         if action == "tonality_custom":
             data = self.tonalityCustom(request)
+        if action == "tonality_daily_custom":
+            data = self.tonalityDailyCustom(request)
         if data and "error" in data:
             return HttpResponseBadRequest(
                 data["message"]
@@ -250,6 +252,41 @@ class RESTAPIView(View):
                 max_val_tonality = []
                 max_val_index = []
                 tmp_index = 1
+        return data
+
+    def tonalityDailyCustom(self, request):
+        """Return data for tonality dailty charts by custom date range."""
+        data = []
+        if "range" not in request.POST:
+            return {
+                "error": 1,
+                "message": _("Date range doesn't provide")
+            }
+        range = request.POST["range"].split(" - ")
+        if len(range) < 2:
+            return {
+                "error": 1,
+                "message": _("Invalid date range")
+            }
+        start_day = datetime.datetime.strptime(
+            range[0], "%Y-%m-%d %H:%M"
+        )
+        end_day = datetime.datetime.strptime(
+            range[1], "%Y-%m-%d %H:%M"
+        )
+        tz = pytz.timezone(settings.TIME_ZONE)
+        start_day = tz.localize(start_day)
+        end_day = tz.localize(end_day)
+        daily_tonality = NewsTonalDaily.objects.all().filter(
+            date__gt=start_day,
+            date__lt=end_day
+        ).order_by("date")
+        for item in daily_tonality:
+            data.append({
+                "news_date": item.date,
+                "tonality": item.tonality,
+                "tonality_index": item.tonality_index
+            })
         return data
 
 

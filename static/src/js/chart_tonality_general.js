@@ -26,44 +26,11 @@ export default class ChartTonalityGeneral extends ChartGeneral {
             }
         }
         let ctx = self.obj[0].getContext("2d");
-        let chart = new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: chart_labels,
-                datasets: [
-                    {
-                        label: "Positive",
-                        data: data_positive,
-                        backgroundColor: self.charts_positive_color,
-                        barPercentage: 1.0
-                    },
-                    {
-                        label: "Negative",
-                        data: data_negative,
-                        backgroundColor: self.charts_negative_color,
-                        barPercentage: 1.0
-                    }
-                ]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: chart_title
-                },
-                legend: {
-                    display: false
-                },
-				responsive: true,
-				scales: {
-					xAxes: [{
-						stacked: true,
-					}],
-					yAxes: [{
-						stacked: true,
-					}]
-				}
-            }
-        });
+        self.bar_options.data.labels = chart_labels;
+        self.bar_options.data.datasets[0].data = data_positive;
+        self.bar_options.data.datasets[1].data = data_negative;
+        self.bar_options.options.title.text = chart_title;
+        let chart = new Chart(ctx, self.bar_options);
     }
 
     init() {

@@ -5,6 +5,71 @@ export default class ChartGeneral {
         this.charts_positive_color = "#00ff00";
         this.charts_negative_color = "#c70000";
         this.charts_neitral_color = "#520000";
+        this.bar_options = {
+            type: "bar",
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: "Positive",
+                        data: [],
+                        backgroundColor: this.charts_positive_color,
+                        barPercentage: 1.0
+                    },
+                    {
+                        label: "Negative",
+                        data: [],
+                        backgroundColor: this.charts_negative_color,
+                        barPercentage: 1.0
+                    }
+                ]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: ""
+                },
+                legend: {
+                    display: false
+                },
+                responsive: true,
+                scales: {
+                    xAxes: [{
+                        stacked: true,
+                    }],
+                    yAxes: [{
+                        stacked: true,
+                    }]
+                }
+            }
+        };
+        this.line_options = {
+            type: "line",
+            data: {
+                labels: [],
+                datasets: [
+                    {
+                        label: "Tonality",
+                        data: [],
+                        borderColor: this.charts_neitral_color,
+                        barPercentage: 1.0,
+                        backgroundColor: "transparent",
+                        borderJoinStyle: "round",
+                        borderWidth: 2,
+                        lineTension: 0
+                    }
+                ]
+            },
+            options: {
+                title: {
+                    display: false
+                },
+                legend: {
+                    display: false
+                },
+                responsive: true
+            }
+        };
     }
 
     requestStart() {
