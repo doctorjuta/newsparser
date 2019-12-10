@@ -13,6 +13,7 @@ jQuery.noConflict();
     function ThemeScript() {
 
         let body = $("body");
+        let html_obj = $("html");
         let wind = $(window);
         let self = this;
 
@@ -50,6 +51,9 @@ jQuery.noConflict();
             let lastScrollTop = 0;
             $(window).scroll(function(event) {
                 let st = $(this).scrollTop();
+                if (st < 80) {
+                    return;
+                }
                 if (st > lastScrollTop){
                     body.removeClass("scroll-up").addClass("scroll-down");
                 } else {
@@ -61,7 +65,7 @@ jQuery.noConflict();
                 e.preventDefault();
                 $("#top-menu, #top-menu-toggle").toggleClass("is-active");
                 $("header .logo").toggleClass("menu-open");
-                body.toggleClass("menu-open");
+                html_obj.toggleClass("menu-open");
             });
         }
 
