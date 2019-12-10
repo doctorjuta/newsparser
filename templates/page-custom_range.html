@@ -9,13 +9,28 @@
             <p class="title is-4 has-text-centered ptitle">{{ title }}</p>
             <div class="loading_wrapper">
                 <form action="{% url 'custom_range' %}" method="post" class="custom_range_form">
-                    <label class="label" for="custom_date_range_select">Часовий період</label>
+                    <label class="label" for="custom_date_range_select">Довільний часовий період (але максимум 7 днів):</label>
                     <div class="field has-addons">
                         <div class="control custom_range_control">
                             <input class="input" type="text" name="daterange" id="custom_date_range_select" />
                         </div>
                         <div class="control">
                             <button type="button" class="button is-nd" id="custom_date_range_render">Надіслати</button>
+                        </div>
+                    </div>
+                    <label class="label">Дані за останній:</label>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button type="button" class="button is-nd" id="custom_date_year">Рік</button>
+                        </div>
+                        <div class="control">
+                            <button type="button" class="button is-nd" id="custom_date_half_year">Пів року</button>
+                        </div>
+                        <div class="control">
+                            <button type="button" class="button is-nd" id="custom_date_3_month">3 місяці</button>
+                        </div>
+                        <div class="control">
+                            <button type="button" class="button is-nd" id="custom_date_month">Місяць</button>
                         </div>
                     </div>
                 </form>

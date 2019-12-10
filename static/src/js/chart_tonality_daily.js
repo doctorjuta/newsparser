@@ -19,40 +19,15 @@ export default class ChartTonalityDaily extends ChartGeneral {
             data_vals.push(it["tonality_index"]);
         }
         let ctx = self.obj[0].getContext("2d");
-        let chart_options = {
-            type: "line",
-            data: {
-                labels: chart_labels,
-                datasets: [
-                    {
-                        label: "Tonality",
-                        data: data_vals,
-                        borderColor: self.charts_neitral_color,
-                        barPercentage: 1.0,
-                        backgroundColor: "transparent",
-                        borderJoinStyle: "round",
-                        borderWidth: 2,
-                        lineTension: 0
-                    }
-                ]
-            },
-            options: {
-                title: {
-                    display: false
-                },
-                legend: {
-                    display: false
-                },
-				responsive: true
-            }
-        };
         if (chart_title != undefined) {
-            chart_options.options.title = {
+            this.line_options.options.title = {
                 display: true,
                 text: chart_title
             };
         }
-        let chart = new Chart(ctx, chart_options);
+        this.line_options.data.labels = chart_labels;
+        this.line_options.data.datasets[0].data = data_vals;
+        let chart = new Chart(ctx, this.line_options);
     }
 
     init() {
