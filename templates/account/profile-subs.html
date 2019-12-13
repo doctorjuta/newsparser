@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}{{ site_name }} | {{ title }}{% endblock %}
+
+{% block content %}
+    <section class="section section-fullheight">
+        <div class="container">
+            <p class="title is-4 has-text-centered ptitle ptitle-mb">{{ title }}</p>
+            <div class="columns">
+                <div class="column is-3">
+                    {% include 'account/menu.html' %}
+                </div>
+                <div class="column is-9">
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

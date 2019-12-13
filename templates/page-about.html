@@ -1,12 +1,11 @@
 {% extends "base.html" %}
-{% load i18n %}
 
 {% block title %}{{ title }}{% endblock %}
 
 {% block content %}
     <section class="section">
         <div class="container">
-            <p class="title is-4 has-text-centered ptitle">{{ title }}</p>
+            <p class="title is-4 has-text-centered ptitle ptitle-mb">{{ title }}</p>
             <div class="content">
                 {{ text|safe }}
             </div>

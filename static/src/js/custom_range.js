@@ -75,7 +75,7 @@ jQuery.noConflict();
                         self.requestError(jqXHR.responseText);
                     },
                     success: function(resp, textStatus, jqXHR) {
-                        self.renderChart(resp.data, "bar");
+                        self.renderChart(resp.data, "bar", self.obj.attr("data-title"));
                     }
                 });
             });
@@ -90,9 +90,6 @@ jQuery.noConflict();
 
         renderChart(data, chart_type, chart_title) {
             let self = this;
-            if (chart_title == undefined) {
-                chart_title = self.obj.attr("data-title");
-            }
             let chart_labels = [];
             let ctx = self.obj[0].getContext("2d");
             if (chart_type == "bar") {
@@ -125,9 +122,13 @@ jQuery.noConflict();
                     chart_labels.push(it_date.getMonth()+1 + "/" + it_date.getDate());
                     data_vals.push(it["tonality_index"]);
                 }
-                this.line_options.data.labels = chart_labels;
-                this.line_options.data.datasets[0].data = data_vals;
-                self.chart = new Chart(ctx, this.line_options);
+                self.line_options.data.labels = chart_labels;
+                self.line_options.data.datasets[0].data = data_vals;
+                self.line_options.options.title = {
+                    display: true,
+                    text: chart_title
+                };
+                self.chart = new Chart(ctx, self.line_options);
             }
 
         }
@@ -138,14 +139,11 @@ jQuery.noConflict();
             let startdate = new Date();
             startdate.setDate(startdate.getDate()-1);
             let maxdate = new Date();
-            var mindate = new Date();
-            mindate.setDate(mindate.getDate()-30);
             self.sel.daterangepicker({
                 startDate: startdate,
                 endDate: enddate,
                 timePicker: true,
                 timePicker24Hour: true,
-                minDate: mindate,
                 maxDate: maxdate,
                 locale: {
                     format: self.date_format

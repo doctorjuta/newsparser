@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}{{ site_name }} | {{ title }}{% endblock %}
+
+{% block content %}
+    <section class="section section-fullheight">
+        <div class="container">
+            <p class="title is-4 has-text-centered ptitle ptitle-mb">{{ title }}</p>
+            <div class="columns">
+                <div class="column is-3">
+                    {% include 'account/menu.html' %}
+                </div>
+                <div class="column is-9">
+                    {% if message %}
+                        {% include "messages/success.html" with text=message %}
+                    {% endif %}
+                    <form method="post" action="{% url 'account_edit' %}">
+                        {% csrf_token %}
+                        <div class="field">
+                            <label class="label">Username</label>
+                            <div class="control">
+                                <input name="username" class="input" type="text" value="{{ user.username }}" disabled="disabled" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Email</label>
+                            <div class="control">
+                                <input name="email" class="input" type="email" value="{{ user.email }}" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Ім'я</label>
+                            <div class="control">
+                                <input name="first_name" class="input" type="text" value="{{ user.first_name }}" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label class="label">Прізвище</label>
+                            <div class="control">
+                                <input name="last_name" class="input" type="text" value="{{ user.last_name }}" />
+                            </div>
+                        </div>
+                        <div class="field is-grouped mt-2">
+                            <div class="control">
+                                <button type="submit" class="button is-nd">Зберегти</button>
+                            </div>
+                            <div class="control">
+                                <a href="{% url 'password_change' %}" class="button is-text">Змінити пароль</a>
+                            </div>
+                        </div>
+                        <input type="hidden" name="user_id" value="{{ user.pk }}" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
