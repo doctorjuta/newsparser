@@ -124,6 +124,14 @@ TINYMCE_DEFAULT_CONFIG = {
 ABOUT_PAGE_ID = 1
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'mail.wordpress.lviv.ua'
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'dutchak@wordpress.lviv.ua'
+EMAIL_HOST_PASSWORD = ';NHr*)(}?wL#'
+
+
 try:
     from config.local_settings import *
 except ImportError:

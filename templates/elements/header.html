@@ -33,6 +33,7 @@
                                 <a class="button is-light" href="{% url 'account_home' %}">Кабінет</a>
                                 <a class="button is-light" href="{% url 'logout' %}">Вийти</a>
                             {% else %}
+                                <a class="button is-light" href="{% url 'account_new' %}">Реєстрація</a>
                                 <a class="button is-light" href="{% url 'login' %}">Увійти</a>
                             {% endif %}
                         </div>
