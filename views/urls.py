@@ -7,6 +7,7 @@ from .views import HomePageView, SingleSourcePage, RESTAPIView
 from .views import page_about, page_custom_range
 
 urlpatterns = [
+    path("account/", include("views.urls_account")),
     path("accounts/", include("django.contrib.auth.urls")),
     path("tinymce/", include("tinymce.urls")),
     path("api/", RESTAPIView.as_view(), name="rest_api"),

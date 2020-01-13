@@ -4,12 +4,12 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views import View
 from django.http import JsonResponse, HttpResponseBadRequest
-from django.utils.translation import gettext as _
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 import datetime
 import pytz
 from models.models import NewsTonal, NewsTonalDaily, NewsSource, Pages
+from views.helpers import data_nomralize_tonality as dmt
 
 
 class MainView(View):
@@ -92,7 +92,7 @@ class SingleSourcePage(MainView):
     def get(self, request, *args, **kwargs):
         """Single source page - get request."""
         data = {
-            "title": _("Single source"),
+            "title": "Джерело",
             "source_url": "",
             "source_id": "",
             "source_logo": "",
@@ -124,7 +124,7 @@ class RESTAPIView(View):
         """REST API main request."""
         if "action" not in request.POST:
             return HttpResponseBadRequest(
-                _("Invalid arguments")
+                "Invalid arguments"
             )
         action = request.POST["action"]
         data = False
@@ -146,7 +146,6 @@ class RESTAPIView(View):
 
     def tonalityGeneral(self, request):
         """Return data for tonality by provided time range."""
-        data = []
         time = "today"
         source_id = False
         if "time" in request.POST:
@@ -171,14 +170,8 @@ class RESTAPIView(View):
             objs = objs.filter(
                 news_item__source__id=source_id
             )
-        for item in objs.order_by("-news_item__date")[:self.MAX_VAL][::-1]:
-            data.append({
-                "news_title": item.news_item.title,
-                "news_date": item.news_item.date,
-                "tonality": item.tonality,
-                "tonality_index": item.tonality_index
-            })
-        return data
+        data = dmt(objs, self.MAX_VAL)
+        return data[::-1]
 
     def tonalityDaily(self, request):
         """Return data for tonality dailty charts."""
@@ -203,13 +196,13 @@ class RESTAPIView(View):
         if "range" not in request.POST:
             return {
                 "error": 1,
-                "message": _("Date range doesn't provide")
+                "message": "Date range doesn't provide"
             }
         range = request.POST["range"].split(" - ")
         if len(range) < 2:
             return {
                 "error": 1,
-                "message": _("Invalid date range")
+                "message": "Invalid date range"
             }
         start_day = datetime.datetime.strptime(
             range[0], "%Y-%m-%d %H:%M"
@@ -224,7 +217,7 @@ class RESTAPIView(View):
         if (range_dates.days > 7):
             return {
                 "error": 1,
-                "message": _("We provide data for maximum 7 days.")
+                "message": "We provide data for maximum 7 days."
             }
         objs = NewsTonal.objects.all().filter(
             news_item__date__gt=start_day,
@@ -260,13 +253,13 @@ class RESTAPIView(View):
         if "range" not in request.POST:
             return {
                 "error": 1,
-                "message": _("Date range doesn't provide")
+                "message": "Date range doesn't provide"
             }
         range = request.POST["range"].split(" - ")
         if len(range) < 2:
             return {
                 "error": 1,
-                "message": _("Invalid date range")
+                "message": "Invalid date range"
             }
         start_day = datetime.datetime.strptime(
             range[0], "%Y-%m-%d %H:%M"
@@ -293,7 +286,7 @@ class RESTAPIView(View):
 def page_about(request):
     """View for about page."""
     data = {
-        "title": _("About project"),
+        "title": "Про проект",
         "text": ""
     }
     template_name = "page-about.html"

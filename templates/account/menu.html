@@ -1,0 +1,10 @@
+{% url 'account_edit' as account_edit %}
+{% url 'account_subs' as account_subs %}
+
+<aside class="menu">
+    <p class="menu-label">Налаштування</p>
+    <ul class="menu-list">
+        <li><a class="{% if request.get_full_path == account_edit %}is-active{% endif %}" href="{% url 'account_edit' %}">Профіль</a></li>
+        <li><a class="{% if request.get_full_path == account_subs %}is-active{% endif %}" href="{% url 'account_subs' %}">Email розсилка</a></li>
+    </ul>
+</aside>

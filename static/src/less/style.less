@@ -23,6 +23,17 @@ body {
     }
 }
 
+.m {
+    &t {
+        &-2 {
+            margin-top: 2rem;
+        }
+        &-3 {
+            margin-top: 3rem;
+        }
+    }
+}
+
 .loading {
     position: relative;
     min-height: 100px;
@@ -135,6 +146,17 @@ body {
 }
 
 
+.menu {
+    &-list {
+        a {
+            &.is-active {
+                background: #520000;
+            }
+        }
+    }
+}
+
+
 .section {
     &-shadow {
         box-shadow: 0 25px 25px rgba(0, 0, 0, 0.05);
@@ -203,12 +225,26 @@ body {
         height: 1px;
         background: #ff2500;
     }
+    &-mb {
+        &.title {
+            margin-bottom: 3rem;
+        }
+        margin-bottom: 3rem;
+    }
 }
 
 .input,
 .textarea,
 .button {
     .rounded(0px);
+}
+
+.form {
+    .errorlist {
+        font-size: .75rem;
+        color: #c70000;
+        margin-top: .25rem;
+    }
 }
 
 .button {
