@@ -40,12 +40,13 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """Run command."""
+        date = datetime.date.today() - datetime.timedelta(days=1)
         fin_img_path = os.path.join(
             settings.BASE_DIR,
             "static",
             "infograph",
             "results",
-            "{}.png".format(datetime.date.today())
+            "{}.png".format(date)
         )
         if os.path.isfile(fin_img_path):
             return ""
@@ -145,13 +146,14 @@ class Command(BaseCommand):
 
     def generate_new_daily_graph(self):
         """Generate image with tonality for recent 30 days."""
+        date = datetime.date.today() - datetime.timedelta(days=1)
         path_to_img = os.path.join(
             settings.BASE_DIR,
             "static",
             "infograph",
             "charts",
             "daily",
-            "{}.png".format(datetime.date.today())
+            "{}.png".format(date)
         )
         if os.path.isfile(path_to_img):
             return path_to_img
