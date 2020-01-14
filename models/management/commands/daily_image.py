@@ -6,7 +6,8 @@ import os
 from models.models import NewsTonalDaily, NewsTonal
 import datetime
 import pytz
-import plotly.graph_objects as go
+import matplotlib
+import matplotlib.pyplot as plt
 
 
 class Command(BaseCommand):
@@ -48,7 +49,7 @@ class Command(BaseCommand):
         )
         if os.path.isfile(fin_img_path):
             return ""
-        main_img = Image.new("RGB", (640, 800), self.bg_color)
+        main_img = Image.new("RGB", (640, 950), self.bg_color)
         logo_img = Image.open(self.logo_img_path)
         main_img.paste(logo_img, (30, 30))
         font_title = ImageFont.truetype(
@@ -89,50 +90,53 @@ class Command(BaseCommand):
             fill=self.font_color
         )
         img.text(
-            (30, 120),
+            (30, 130),
             "Статистика:",
             font=font_title,
             fill=self.font_color
         )
         img.text(
-            (30, 170),
+            (30, 180),
             "Загальна тональність: {}".format(last_tonality.tonality_index),
             font=font_regular,
             fill=self.font_color
         )
         img.text(
-            (30, 200),
+            (30, 210),
             "Кількість позитивних новин: {}".format(positive),
             font=font_regular,
             fill=self.font_color
         )
         img.text(
-            (30, 230),
+            (30, 240),
             "Кількість негативних новин: {}".format(negative),
             font=font_regular,
             fill=self.font_color
         )
         img.text(
-            (30, 260),
+            (30, 270),
             "Кількість нейтральних новин: {}".format(neutral),
             font=font_regular,
             fill=self.font_color
         )
         img.text(
-            (30, 320),
+            (30, 330),
             "Динаміка за останні 30 днів:",
             font=font_title,
             fill=self.font_color
         )
         path_to_chart = self.generate_new_daily_graph()
         chart_img = Image.open(path_to_chart)
-        main_img.paste(chart_img, (14, 380))
+        wpercent = (580/float(chart_img.size[0]))
+        hsize = int((float(chart_img.size[1])*float(wpercent)))
+        chart_img = chart_img.resize((580, hsize), Image.ANTIALIAS)
+        main_img.paste(chart_img, (30, 390))
         img.line(
-            (30, 720, 610, 720),
+            (30, 880, 610, 880),
             fill=self.font_color
         )
         img.text(
-            (30, 750),
+            (30, 900),
             "Більше інформації на сайті news-detect.org.",
             font=font_footer,
             fill=self.font_color
@@ -162,22 +166,22 @@ class Command(BaseCommand):
         for item in last_daily_tonality:
             x_val.append("{}/{}".format(item.date.month, item.date.day))
             y_val.append(item.tonality_index)
-        fig = go.Figure()
-        fig.add_trace(
-            go.Scatter(
-                x=x_val,
-                y=y_val,
-                mode="lines",
-                name="Тональність за останні 30 днів",
-                line=dict(color="#520000", width=2)
-            )
+
+        fig, ax = plt.subplots()
+        ax.plot(x_val, y_val)
+        ax.set(
+            xlabel="",
+            ylabel="",
+            title="",
+            facecolor="#E0E0E0",
+            xmargin=0.1,
+            ymargin=0.1
         )
-        fig.update_layout(
-            paper_bgcolor="#E0E0E0",
-            plot_bgcolor="#E0E0E0",
-            width=580,
-            height=300,
-            margin=dict(r=0, l=0, b=0, t=0)
-        )
-        fig.write_image(path_to_img)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+        ax.grid()
+        plt.xticks(rotation=90)
+        plt.subplots_adjust(top=1, bottom=0, right=1, left=0, hspace=0, wspace=0)
+        plt.margins(0, 0)
+        fig.savefig(path_to_img, facecolor="#E0E0E0", bbox_inches="tight", pad_inches=0)
         return path_to_img
