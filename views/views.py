@@ -155,16 +155,24 @@ class RESTAPIView(View):
         today = datetime.date.today()
         if time == "yesterday":
             yesterday = today - datetime.timedelta(days=1)
+            yesterday_time = datetime.datetime.combine(
+                yesterday,
+                datetime.datetime.min.time()
+            )
             time = datetime.datetime.now() - datetime.timedelta(days=1)
             tz = pytz.timezone(settings.TIME_ZONE)
             time = tz.localize(time)
             objs = NewsTonal.objects.all().filter(
-                news_item__date__startswith=yesterday,
+                news_item__date__gte=yesterday_time,
                 news_item__date__lt=time
             )
         else:
+            time = datetime.datetime.combine(
+                today,
+                datetime.datetime.min.time()
+            )
             objs = NewsTonal.objects.all().filter(
-                news_item__date__startswith=today
+                news_item__date__gte=time
             )
         if source_id:
             objs = objs.filter(
