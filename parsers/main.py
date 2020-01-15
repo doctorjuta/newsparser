@@ -2,6 +2,7 @@
 import importlib
 from django.utils import timezone
 from config.logger import AppLogger
+from django.core.exceptions import MultipleObjectsReturned
 
 
 class MainParser:
@@ -40,15 +41,23 @@ class MainParser:
             parser = parser_mod.SourceParser()
             news = parser.get_news()
             for n in news:
-                obj, created = NewsMessage.objects.get_or_create(
-                    link=n["link"],
-                    source=s
-                )
-                if created:
-                    obj.title = n["title"]
-                    obj.text = n["text"]
-                    obj.date = n["date"]
-                    obj.save()
+                try:
+                    obj, created = NewsMessage.objects.get_or_create(
+                        link=n["link"],
+                        source=s
+                    )
+                    if created:
+                        obj.title = n["title"]
+                        obj.text = n["text"]
+                        obj.date = n["date"]
+                        obj.save()
+                except MultipleObjectsReturned:
+                    objs = NewsMessage.objects.filter(
+                        link=n["link"],
+                        source=s
+                    )
+                    for o in objs[1:]:
+                        o.delete()
             now = timezone.now()
             s.last_parsed = now
             s.save()

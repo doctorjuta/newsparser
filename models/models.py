@@ -76,7 +76,9 @@ class NewsMessage(models.Model):
         max_length=250
     )
     date = models.DateTimeField(
-        "Date"
+        "Date",
+        auto_now_add=True,
+        blank=True
     )
     source = models.ForeignKey(
         "NewsSource",
