@@ -15,16 +15,33 @@ from views.helpers import data_nomralize_tonality as dmt
 class MainView(View):
     """CBV - base site with methods for all project."""
 
-    def get_stat_data(self, date, data, source, prefix):
+    def get_stat_data(self, data, source, prefix):
         """Get statistics data for tonalities."""
         positive = 0
         negative = 0
         neutral = 0
         filters = {}
-        if isinstance(date, datetime.datetime):
-            filters["news_item__date__gt"] = date
-        else:
-            filters["news_item__date__startswith"] = date
+        tz = pytz.timezone(settings.TIME_ZONE)
+        if prefix == "today":
+            today = datetime.datetime.combine(
+                datetime.date.today(),
+                datetime.datetime.min.time()
+            )
+            today = tz.localize(today)
+            filters["news_item__date__gte"] = today
+        if prefix == "yesterday":
+            today = datetime.datetime.combine(
+                datetime.date.today(),
+                datetime.datetime.min.time()
+            )
+            today = tz.localize(today)
+            yesterday = today-datetime.timedelta(days=1)
+            filters["news_item__date__gte"] = yesterday
+            filters["news_item__date__lt"] = today
+        if prefix == "last24":
+            today = tz.localize(datetime.datetime.today())
+            yesterday = today-datetime.timedelta(days=1)
+            filters["news_item__date__gte"] = yesterday
         if source:
             filters["news_item__source"] = source
         all = NewsTonal.objects.all().filter(
@@ -66,17 +83,12 @@ class HomePageView(MainView):
     def get(self, request, *args, **kwargs):
         """Home page - get request."""
         data = {}
-        tz = pytz.timezone(settings.TIME_ZONE)
         if request.user.is_authenticated:
             template_name = "home-login.html"
-            today = datetime.date.today()
-            yesterday = today-datetime.timedelta(days=1)
-            data = self.get_stat_data(today, data, False, "today")
-            data = self.get_stat_data(yesterday, data, False, "yesterday")
+            data = self.get_stat_data(data, False, "today")
+            data = self.get_stat_data(data, False, "yesterday")
         else:
-            today_dt = tz.localize(datetime.datetime.today())
-            yesterday_dt = today_dt-datetime.timedelta(days=1)
-            data = self.get_stat_data(yesterday_dt, data, False, "last24")
+            data = self.get_stat_data(data, False, "last24")
             template_name = "home-anonymous.html"
         return render(
             request,
@@ -106,8 +118,7 @@ class SingleSourcePage(MainView):
             data["source_logo"] = source.logo
             data["source_desc"] = source.desctiption
         template_name = "single-source.html"
-        today = datetime.date.today()
-        data = self.get_stat_data(today, data, source, "today")
+        data = self.get_stat_data(data, source, "today")
         return render(
             request,
             template_name,
@@ -152,6 +163,7 @@ class RESTAPIView(View):
             time = request.POST["time"]
         if "source_id" in request.POST:
             source_id = request.POST["source_id"]
+        tz = pytz.timezone(settings.TIME_ZONE)
         today = datetime.date.today()
         if time == "yesterday":
             yesterday = today - datetime.timedelta(days=1)
@@ -160,7 +172,7 @@ class RESTAPIView(View):
                 datetime.datetime.min.time()
             )
             time = datetime.datetime.now() - datetime.timedelta(days=1)
-            tz = pytz.timezone(settings.TIME_ZONE)
+            yesterday_time = tz.localize(yesterday_time)
             time = tz.localize(time)
             objs = NewsTonal.objects.all().filter(
                 news_item__date__gte=yesterday_time,
@@ -171,6 +183,7 @@ class RESTAPIView(View):
                 today,
                 datetime.datetime.min.time()
             )
+            time = tz.localize(time)
             objs = NewsTonal.objects.all().filter(
                 news_item__date__gte=time
             )

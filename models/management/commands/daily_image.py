@@ -40,13 +40,16 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         """Run command."""
-        date = datetime.date.today() - datetime.timedelta(days=1)
+        last_tonality = NewsTonalDaily.objects.last()
+        all_tonalities = NewsTonal.objects.filter(
+            news_item__date__startswith=last_tonality.date
+        )
         fin_img_path = os.path.join(
             settings.BASE_DIR,
             "static",
             "infograph",
             "results",
-            "{}.png".format(date)
+            "{}.png".format(last_tonality.date)
         )
         if os.path.isfile(fin_img_path):
             return ""
@@ -69,10 +72,6 @@ class Command(BaseCommand):
         img.line(
             (30, 100, 610, 100),
             fill=self.font_color
-        )
-        last_tonality = NewsTonalDaily.objects.last()
-        all_tonalities = NewsTonal.objects.filter(
-            news_item__date__startswith=last_tonality.date
         )
         positive = 0
         negative = 0
