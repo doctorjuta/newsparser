@@ -248,7 +248,7 @@ class RESTAPIView(View):
         max_val_tonality = []
         max_val_index = []
         tmp_index = 1
-        for item in objs.order_by("-news_item__date"):
+        for item in objs.order_by("news_item__date"):
             max_val_tonality.append(item.tonality)
             max_val_index.append(item.tonality_index)
             tmp_index += 1
