@@ -1,3 +1,6 @@
+import {renderErrorMess} from "./helpers";
+
+
 export default class ChartGeneral {
 
     constructor(obj) {
@@ -89,13 +92,7 @@ export default class ChartGeneral {
     }
 
     requestError(text) {
-        let message = `
-            <div class="notification is-danger">
-                <button class="delete"></button>
-                ${text}
-            </div>
-        `;
-        this.obj.before(message);
+        renderErrorMess(text, this.obj);
     }
 
     renderChart(data) {}

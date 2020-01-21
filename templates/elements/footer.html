@@ -1,5 +1,20 @@
 <footer class="footer">
-    <div class="content has-text-centered">
-        <p>Проект NewsDetect &copy; {% now "Y" %}</p>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-half">
+                <div class="content">
+                    <p>Проект NewsDetect &copy; {% now "Y" %}</p>
+                </div>
+            </div>
+            <div class="column is-half">
+                <ul class="footer-icons">
+                    <li class="footer-icons-item">
+                        <a title="Telegram" class="footer-icons-link" href="https://t.me/newsdetect" target="_blank">
+                            {% include 'icons/telegram.html' %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
 </footer>

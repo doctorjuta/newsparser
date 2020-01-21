@@ -108,7 +108,8 @@ class SingleSourcePage(MainView):
             "source_url": "",
             "source_id": "",
             "source_logo": "",
-            "source_desc": ""
+            "source_desc": "",
+            "last_news": []
         }
         source = NewsSource.objects.get(pk=self.kwargs["id"])
         if source:
@@ -117,6 +118,11 @@ class SingleSourcePage(MainView):
             data["source_id"] = source.id
             data["source_logo"] = source.logo
             data["source_desc"] = source.desctiption
+            data["last_news"] = NewsTonal.objects.filter(
+                news_item__source=source
+            ).order_by(
+                "-news_item__date"
+            )[:20]
         template_name = "single-source.html"
         data = self.get_stat_data(data, source, "today")
         return render(
@@ -147,6 +153,8 @@ class RESTAPIView(View):
             data = self.tonalityCustom(request)
         if action == "tonality_daily_custom":
             data = self.tonalityDailyCustom(request)
+        if action == "last_news_more":
+            data = self.lastNews(request)
         if data and "error" in data:
             return HttpResponseBadRequest(
                 data["message"]
@@ -301,6 +309,40 @@ class RESTAPIView(View):
                 "tonality": item.tonality,
                 "tonality_index": item.tonality_index
             })
+        return data
+
+    def lastNews(self, request):
+        """Return last news with tonalities."""
+        data = []
+        per_page = 20
+        start_indx = 0
+        fin_indx = per_page
+        if "source_id" not in request.POST:
+            return {
+                "error": 1,
+                "message": "Source ID doesn't provide"
+            }
+        if "page" in request.POST:
+            start_indx = int(request.POST["page"])*per_page
+            fin_indx = (int(request.POST["page"])+1)*per_page
+        source_id = request.POST["source_id"]
+        source = NewsSource.objects.get(pk=source_id)
+        if source:
+            last_news = NewsTonal.objects.filter(
+                news_item__source=source
+            ).order_by(
+                "-news_item__date"
+            )[start_indx:fin_indx]
+            for item in last_news:
+                item_date = item.news_item.date.replace(
+                    tzinfo=pytz.utc
+                ).astimezone(pytz.timezone(settings.TIME_ZONE))
+                data.append({
+                    "title": item.news_item.title,
+                    "date": item_date.strftime("%d/%m/%Y %H:%M:%S"),
+                    "link": item.news_item.link,
+                    "tonality_index": item.tonality_index
+                })
         return data
 
 

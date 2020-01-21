@@ -3,7 +3,7 @@ import "../css/daterangepicker.css";
 import "./moment.min.js";
 import "./daterangepicker.min.js";
 import Chart from "chart.js";
-import {getCookie, csrfSafeMethod} from "./ajax_helpers";
+import {getCookie, csrfSafeMethod} from "./helpers";
 import ChartGeneral from "./chart_general";
 const moment = require("moment");
 

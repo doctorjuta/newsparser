@@ -266,6 +266,25 @@ body {
     color: #fff;
     padding-top: 2rem;
     padding-bottom: 2rem;
+    &-icons {
+        .flex-display(flex);
+        .justify-content(flex-end);
+        &-item {
+            width: 26px;
+            height: 26px;
+            margin-left: 1rem;
+        }
+        &-link {
+            display: block;
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+            path {
+                fill: #fff;
+            }
+        }
+    }
 }
 
 .login {
@@ -284,6 +303,41 @@ body {
     p {
         a {
             color: #ff2500;
+        }
+    }
+}
+
+.last {
+    &_news {
+        &_item {
+            .flex-display(flex);
+            .justify-content(flex-start);
+            .align-items(center);
+            padding: 1rem;
+            &:nth-child(2n) {
+                background-color: whitesmoke;
+            }
+        }
+        &_title {
+            font-size: 1rem;
+        }
+        &_date {
+            font-size: .75em;
+            margin-left: 1rem;
+        }
+        &_tonality {
+            width: 36px;
+            height: 36px;
+            text-align: center;
+            line-height: 36px;
+            .rounded(50%);
+            margin-right: 1rem;
+        }
+        &_wrp {
+            margin-bottom: 2rem;
+        }
+        a {
+            color: #363636;
         }
     }
 }

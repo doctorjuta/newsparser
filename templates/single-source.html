@@ -68,4 +68,20 @@
             </div>
         </div>
     </section>
+    <section class="section">
+        <div class="container">
+            <p class="title is-4 has-text-centered ptitle">Останні новини джерела:</p>
+            <div class="last_news" id="last_news" data-page="1" data-source="{{ source_id }}">
+                <div class="last_news_wrp">
+                    {% for item in last_news %}
+                        <div class="last_news_item">
+                            <p class="last_news_tonality" style="{% if item.tonality_index > 0 %}background-color: #00ff00;{% elif item.tonality_index < 0 %}background-color: #c70000; color: #ffffff;{% else %}background-color: transparent;{% endif %}">{{ item.tonality_index }}</p>
+                            <p class="last_news_title"><a target="_blank" href="{{ item.news_item.link }}">{{ item.news_item.title }}</a><span class="last_news_date">{{ item.news_item.date|date:"d/m/Y H:i:s" }}</span></p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="last_news_btn button is-nd" id="last_news_more" type="button">Завантажити ще</button>
+            </div>
+        </div>
+    </section>
 {% endblock %}
