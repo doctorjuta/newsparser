@@ -18,7 +18,7 @@ class Command(BaseCommand):
         self.img_path = self.get_image()
         if not self.img_path:
             return ""
-        # self.post_to_twitter();
+        self.post_to_twitter();
         self.post_to_telegram();
 
     def get_image(self):
@@ -51,14 +51,13 @@ class Command(BaseCommand):
         try:
             api.verify_credentials()
         except Exception as e:
-            logger_message = "Error creating API."
-            self.logger.write_error(logger_message)
+            message = "Error creating API."
+            tw_logger.write_error(message)
             return ""
         result = api.update_with_media(
             filename=self.img_path,
             status=self.img_caption
         )
-        print(result)
 
     def post_to_telegram(self):
         """Posting to Telegram."""
