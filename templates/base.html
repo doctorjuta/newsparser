@@ -11,7 +11,7 @@
         <meta name="keywords" content="новини,тональність,news,tonality,українські,позитивні,негативні,нейтральні,ЗМІ,тональність новин,інформація,аналіз,вплив,влада">
         <meta name="author" content="Andrii Dutchak">
         <title>{% block title %}NewsDetect: аналізуємо тональність новин{% endblock %}</title>
-        <link rel="stylesheet" href="{% static 'dist/main.css' %}">
+        <link rel="stylesheet" href="{% static 'dist/main.css' %}?v=1.0.0">
         {% block custom_css %}{% endblock %}
         <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}" />
         <script>
@@ -22,7 +22,7 @@
         {% include 'elements/header.html' %}
         {% block content %}{% endblock %}
         {% include 'elements/footer.html' %}
-        <script src="{% static 'dist/main.js' %}"></script>
+        <script src="{% static 'dist/main.js' %}?v=1.0.0"></script>
         {% block custom_js %}{% endblock %}
     </body>
 </html>
