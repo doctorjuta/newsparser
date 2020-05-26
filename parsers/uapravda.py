@@ -4,6 +4,7 @@ from datetime import datetime
 import pytz
 from bs4 import BeautifulSoup
 import urllib.request as ur
+from urllib.error import HTTPError, URLError
 from config.logger import AppLogger
 
 
@@ -46,24 +47,36 @@ class SourceParser:
     def get_news_text(self, link):
         """Get news text by provided link."""
         text = ""
-        with ur.urlopen(link) as response:
-            soup = BeautifulSoup(
-                response.read(),
-                "html.parser",
-                from_encoding="cp1251"
-            )
-            text_div = soup.find("div", class_="post_news__text")
-            if not text_div:
-                text_div = soup.find("div", class_="post__text")
-            if not text_div:
-                text_div = soup.find("article", class_="article")
-            if text_div:
-                for script in text_div(["script", "style"]):
-                    script.decompose()
-                text = text_div.get_text()
-            else:
-                logger_message = "Can not find text block for URL {}".format(
-                    link
+        try:
+            with ur.urlopen(link) as response:
+                soup = BeautifulSoup(
+                    response.read(),
+                    "html.parser",
+                    from_encoding="cp1251"
                 )
-                self.logger.write_error(logger_message)
+                text_div = soup.find("div", class_="post_news__text")
+                if not text_div:
+                    text_div = soup.find("div", class_="post__text")
+                if not text_div:
+                    text_div = soup.find("article", class_="article")
+                if text_div:
+                    for script in text_div(["script", "style"]):
+                        script.decompose()
+                    text = text_div.get_text()
+                else:
+                    message = "Can not find text block for URL {}".format(
+                        link
+                    )
+                    self.logger.write_error(message)
+        except URLError as e:
+            message = "URLError with reason {}".format(
+                e.reason
+            )
+            self.logger.write_error(message)
+        except HTTPError as e:
+            message = "HTTPError with code {} and reason {}".format(
+                e.code,
+                e.reason
+            )
+            self.logger.write_error(message)
         return text

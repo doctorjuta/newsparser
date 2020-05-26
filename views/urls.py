@@ -3,8 +3,15 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
 from .views import HomePageView, SingleSourcePage, RESTAPIView
 from .views import page_about, page_custom_range
+from .sitemap import StaticPagesSitemap, SourcesSitemap
+
+sitemaps = {
+    "static": StaticPagesSitemap,
+    "sources": SourcesSitemap
+}
 
 urlpatterns = [
     path("account/", include("views.urls_account")),
@@ -14,7 +21,8 @@ urlpatterns = [
     path("", HomePageView.as_view(), name="home_page"),
     path("source/<int:id>/", SingleSourcePage.as_view(), name="single_source"),
     path("about/", page_about, name="about"),
-    path("custom_range/", page_custom_range, name="custom_range")
+    path("custom_range/", page_custom_range, name="custom_range"),
+    path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap")
 ]
 
 

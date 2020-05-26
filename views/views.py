@@ -15,16 +15,33 @@ from views.helpers import data_nomralize_tonality as dmt
 class MainView(View):
     """CBV - base site with methods for all project."""
 
-    def get_stat_data(self, date, data, source, prefix):
+    def get_stat_data(self, data, source, prefix):
         """Get statistics data for tonalities."""
         positive = 0
         negative = 0
         neutral = 0
         filters = {}
-        if isinstance(date, datetime.datetime):
-            filters["news_item__date__gt"] = date
-        else:
-            filters["news_item__date__startswith"] = date
+        tz = pytz.timezone(settings.TIME_ZONE)
+        if prefix == "today":
+            today = datetime.datetime.combine(
+                datetime.date.today(),
+                datetime.datetime.min.time()
+            )
+            today = tz.localize(today)
+            filters["news_item__date__gte"] = today
+        if prefix == "yesterday":
+            today = datetime.datetime.combine(
+                datetime.date.today(),
+                datetime.datetime.min.time()
+            )
+            today = tz.localize(today)
+            yesterday = today-datetime.timedelta(days=1)
+            filters["news_item__date__gte"] = yesterday
+            filters["news_item__date__lt"] = today
+        if prefix == "last24":
+            today = tz.localize(datetime.datetime.today())
+            yesterday = today-datetime.timedelta(days=1)
+            filters["news_item__date__gte"] = yesterday
         if source:
             filters["news_item__source"] = source
         all = NewsTonal.objects.all().filter(
@@ -66,17 +83,12 @@ class HomePageView(MainView):
     def get(self, request, *args, **kwargs):
         """Home page - get request."""
         data = {}
-        tz = pytz.timezone(settings.TIME_ZONE)
         if request.user.is_authenticated:
             template_name = "home-login.html"
-            today = datetime.date.today()
-            yesterday = today-datetime.timedelta(days=1)
-            data = self.get_stat_data(today, data, False, "today")
-            data = self.get_stat_data(yesterday, data, False, "yesterday")
+            data = self.get_stat_data(data, False, "today")
+            data = self.get_stat_data(data, False, "yesterday")
         else:
-            today_dt = tz.localize(datetime.datetime.today())
-            yesterday_dt = today_dt-datetime.timedelta(days=1)
-            data = self.get_stat_data(yesterday_dt, data, False, "last24")
+            data = self.get_stat_data(data, False, "last24")
             template_name = "home-anonymous.html"
         return render(
             request,
@@ -96,7 +108,8 @@ class SingleSourcePage(MainView):
             "source_url": "",
             "source_id": "",
             "source_logo": "",
-            "source_desc": ""
+            "source_desc": "",
+            "last_news": []
         }
         source = NewsSource.objects.get(pk=self.kwargs["id"])
         if source:
@@ -105,9 +118,13 @@ class SingleSourcePage(MainView):
             data["source_id"] = source.id
             data["source_logo"] = source.logo
             data["source_desc"] = source.desctiption
+            data["last_news"] = NewsTonal.objects.filter(
+                news_item__source=source
+            ).order_by(
+                "-news_item__date"
+            )[:20]
         template_name = "single-source.html"
-        today = datetime.date.today()
-        data = self.get_stat_data(today, data, source, "today")
+        data = self.get_stat_data(data, source, "today")
         return render(
             request,
             template_name,
@@ -136,6 +153,8 @@ class RESTAPIView(View):
             data = self.tonalityCustom(request)
         if action == "tonality_daily_custom":
             data = self.tonalityDailyCustom(request)
+        if action == "last_news_more":
+            data = self.lastNews(request)
         if data and "error" in data:
             return HttpResponseBadRequest(
                 data["message"]
@@ -152,6 +171,7 @@ class RESTAPIView(View):
             time = request.POST["time"]
         if "source_id" in request.POST:
             source_id = request.POST["source_id"]
+        tz = pytz.timezone(settings.TIME_ZONE)
         today = datetime.date.today()
         if time == "yesterday":
             yesterday = today - datetime.timedelta(days=1)
@@ -160,7 +180,7 @@ class RESTAPIView(View):
                 datetime.datetime.min.time()
             )
             time = datetime.datetime.now() - datetime.timedelta(days=1)
-            tz = pytz.timezone(settings.TIME_ZONE)
+            yesterday_time = tz.localize(yesterday_time)
             time = tz.localize(time)
             objs = NewsTonal.objects.all().filter(
                 news_item__date__gte=yesterday_time,
@@ -171,6 +191,7 @@ class RESTAPIView(View):
                 today,
                 datetime.datetime.min.time()
             )
+            time = tz.localize(time)
             objs = NewsTonal.objects.all().filter(
                 news_item__date__gte=time
             )
@@ -235,7 +256,7 @@ class RESTAPIView(View):
         max_val_tonality = []
         max_val_index = []
         tmp_index = 1
-        for item in objs.order_by("-news_item__date"):
+        for item in objs.order_by("news_item__date"):
             max_val_tonality.append(item.tonality)
             max_val_index.append(item.tonality_index)
             tmp_index += 1
@@ -288,6 +309,40 @@ class RESTAPIView(View):
                 "tonality": item.tonality,
                 "tonality_index": item.tonality_index
             })
+        return data
+
+    def lastNews(self, request):
+        """Return last news with tonalities."""
+        data = []
+        per_page = 20
+        start_indx = 0
+        fin_indx = per_page
+        if "source_id" not in request.POST:
+            return {
+                "error": 1,
+                "message": "Source ID doesn't provide"
+            }
+        if "page" in request.POST:
+            start_indx = int(request.POST["page"])*per_page
+            fin_indx = (int(request.POST["page"])+1)*per_page
+        source_id = request.POST["source_id"]
+        source = NewsSource.objects.get(pk=source_id)
+        if source:
+            last_news = NewsTonal.objects.filter(
+                news_item__source=source
+            ).order_by(
+                "-news_item__date"
+            )[start_indx:fin_indx]
+            for item in last_news:
+                item_date = item.news_item.date.replace(
+                    tzinfo=pytz.utc
+                ).astimezone(pytz.timezone(settings.TIME_ZONE))
+                data.append({
+                    "title": item.news_item.title,
+                    "date": item_date.strftime("%d/%m/%Y %H:%M:%S"),
+                    "link": item.news_item.link,
+                    "tonality_index": item.tonality_index
+                })
         return data
 
 

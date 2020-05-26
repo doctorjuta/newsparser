@@ -1,6 +1,6 @@
 import Chart from "chart.js";
 import $ from "jquery";
-import {getCookie, csrfSafeMethod} from "./ajax_helpers";
+import {getCookie, csrfSafeMethod} from "./helpers";
 import ChartGeneral from "./chart_general";
 
 

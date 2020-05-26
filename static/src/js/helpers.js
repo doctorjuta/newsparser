@@ -16,3 +16,13 @@ export function getCookie(name) {
 export function csrfSafeMethod(method) {
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
+
+export function renderErrorMess(text, obj) {
+    let message = `
+        <div class="notification is-danger">
+            <button class="delete"></button>
+            ${text}
+        </div>
+    `;
+    obj.before(message);
+}

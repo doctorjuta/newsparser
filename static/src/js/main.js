@@ -4,6 +4,7 @@ import "../less/style.less";
 import ChartTonalityGeneral from "./chart_tonality_general";
 import ChartTonalityDaily from "./chart_tonality_daily";
 import { CountUp } from 'countup.js';
+import {getCookie, csrfSafeMethod, renderErrorMess} from "./helpers";
 
 
 jQuery.noConflict();
@@ -70,11 +71,65 @@ jQuery.noConflict();
             });
         }
 
+        function initLoadMoreLast() {
+            $("#last_news_more").click(function() {
+                let btn = $(this);
+                let cont = $("#last_news");
+                let cont_wrp = cont.find(".last_news_wrp");
+                let param = {
+                    action: "last_news_more",
+                    source_id: parseInt(cont.attr("data-source")),
+                    page: parseInt(cont.attr("data-page"))
+                }
+                $.ajax({
+                    url: rest_url,
+                    dataType: "json",
+                    type: "POST",
+                    data: param,
+                    beforeSend: function(xhr, settings) {
+                        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                            let csrftoken = getCookie("csrftoken");
+                            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                        }
+                        cont.addClass("loading");
+                        btn.attr("disabled", "disabled");
+                    },
+                    complete: function() {
+                        cont.removeClass("loading");
+                        btn.removeAttr("disabled");
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        let errorMessage = "Projects error: " + errorThrown + " URL: " + window.location.href;
+                        renderErrorMess(errorMessage, cont);
+                    },
+                    success: function(resp, textStatus, jqXHR) {
+                        for (let i=0;i<resp.data.length;i++) {
+                            let tonality_style = "background-color: transparent;";
+                            if (resp.data[i].tonality_index > 0) {
+                                tonality_style = "background-color: #00ff00;";
+                            } else if (resp.data[i].tonality_index < 0) {
+                                tonality_style = "background-color: #c70000; color: #ffffff;";
+                            }
+                            cont_wrp.append(`
+                                <div class="last_news_item">
+                                    <p class="last_news_tonality" style="${tonality_style}">${resp.data[i].tonality_index}</p>
+                                    <p class="last_news_title"><a target="_blank" href="${resp.data[i].link}">${resp.data[i].title}</a><span class="last_news_date">${resp.data[i].date}</span></p>
+                                </div>
+                            `);
+                        }
+                        cont.attr("data-page", param.page+1);
+                    }
+                });
+                return false;
+            });
+        }
+
         self.run = function() {
             initCharts();
             initNumberCouts();
             initNotifications();
             initHeader();
+            initLoadMoreLast();
         }
 
     }
