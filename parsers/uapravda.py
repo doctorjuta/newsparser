@@ -22,7 +22,7 @@ class SourceParser:
         d = feedparser.parse(self.src)
         news = []
         for n in d.entries:
-            if not n.link:
+            if not hasattr(n, 'link'):
                 continue
             tz = pytz.timezone("UTC")
             text = self.get_news_text(n.link)
