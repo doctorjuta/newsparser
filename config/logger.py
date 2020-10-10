@@ -2,7 +2,7 @@
 import logging
 from logging.handlers import RotatingFileHandler
 from django.conf import settings
-import telegram
+import requests
 
 
 class AppLogger:
@@ -30,7 +30,6 @@ class AppLogger:
                 logger_name
             )
         self.create_logger()
-        self.BOT = telegram.Bot(token=settings.TELEGRAM_BOT_TOKEN)
 
     def create_logger(self):
         """Create logger object."""
@@ -66,7 +65,12 @@ class AppLogger:
         """Write error message."""
         self.LOGGER_ERRORS.error(message)
         telegram_message = "{}: {}".format("NEWS-DETECT", message)
-        self.BOT.send_message(
-            chat_id=settings.TELEGRAM_CHAT_ID,
-            text=telegram_message
+        send_url = (
+            "https://api.telegram.org/bot{}/sendMessage?"
+            "chat_id={}&text={}"
+        ).format(
+            settings.TELEGRAM_BOT_TOKEN,
+            settings.TELEGRAM_CHAT_ID,
+            telegram_message
         )
+        response = requests.post(send_url)

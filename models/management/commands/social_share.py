@@ -18,8 +18,8 @@ class Command(BaseCommand):
         self.img_path = self.get_image()
         if not self.img_path:
             return ""
-        self.post_to_twitter();
-        self.post_to_telegram();
+        self.post_to_twitter()
+        self.post_to_telegram()
 
     def get_image(self):
         """Getting image with statistic information."""
