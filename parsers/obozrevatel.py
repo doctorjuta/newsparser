@@ -45,6 +45,9 @@ class SourceParser:
     def get_news_text(self, link):
         """Get news text by provided link."""
         text = ""
+        class_to_remove = [
+            "footnote"
+        ]
         try:
             with ur.urlopen(link) as response:
                 soup = BeautifulSoup(
@@ -55,7 +58,12 @@ class SourceParser:
                 text_div = soup.find("div", class_="newsFull_text")
                 if not text_div:
                     text_div = soup.find("div", class_="news-video-full__text")
+                if not text_div:
+                    text_div = soup.find("div", class_="news-full__text")
                 if text_div:
+                    for cls in class_to_remove:
+                        for div in text_div.find_all("div", {"class": cls}):
+                            div.decompose()
                     for script in text_div(["script", "style"]):
                         script.decompose()
                     text = text_div.get_text()
