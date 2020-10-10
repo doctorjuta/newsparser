@@ -12,7 +12,6 @@ class SourceParser:
     """Main class for Segodnya site parser."""
 
     src = "https://segodnya.ua/data/last_news_ru.json"
-    base_path = "https://segodnya.ua"
 
     def __init__(self):
         """Init main class."""
@@ -39,7 +38,7 @@ class SourceParser:
             )
             self.logger.write_error(message)
         for n in json_data:
-            link = self.base_path + n["path"]
+            link = n["path"]
             text = self.get_news_text(link)
             tz = pytz.timezone("UTC")
             date = datetime.fromtimestamp(n["timestamp"], tz=tz)
@@ -61,6 +60,10 @@ class SourceParser:
             "article__facebook",
             "article__footer",
             "article__banner-container",
+            "article__time",
+            "article__header",
+            "article__author",
+            "article__adml",
             "banner-img",
             "content-tags",
             "content-source",
@@ -81,6 +84,8 @@ class SourceParser:
                     text_div = soup.find("div", class_="article-content")
                     if text_div:
                         text_div = text_div.find("div", class_="col-lg-8")
+                if not text_div:
+                    text_div = soup.find("article", class_="article__content")
                 if text_div:
                     for cls in class_to_remove:
                         for div in text_div.find_all("div", {"class": cls}):

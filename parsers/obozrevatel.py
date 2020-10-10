@@ -52,7 +52,7 @@ class SourceParser:
                     "html.parser",
                     from_encoding="cp1251"
                 )
-                text_div = soup.find("div", class_="news-full__text")
+                text_div = soup.find("div", class_="newsFull_text")
                 if not text_div:
                     text_div = soup.find("div", class_="news-video-full__text")
                 if text_div:

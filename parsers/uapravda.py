@@ -58,6 +58,8 @@ class SourceParser:
                 if not text_div:
                     text_div = soup.find("div", class_="post__text")
                 if not text_div:
+                    text_div = soup.find("div", class_="post_text")
+                if not text_div:
                     text_div = soup.find("article", class_="article")
                 if text_div:
                     for script in text_div(["script", "style"]):

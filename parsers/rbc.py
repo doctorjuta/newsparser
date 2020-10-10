@@ -33,7 +33,7 @@ class SourceParser:
                 tz
             )
             text = ""
-            text_div = BeautifulSoup(n.description, "html.parser")
+            text_div = BeautifulSoup(n.fulltext, "html.parser")
             if text_div:
                 for script in text_div(["script", "style"]):
                     script.decompose()
