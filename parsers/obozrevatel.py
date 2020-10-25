@@ -11,7 +11,7 @@ from config.logger import AppLogger
 class SourceParser:
     """Main class for Obozrevatel site parser."""
 
-    src = "https://www.obozrevatel.com/rss.xml"
+    src = "https://www.obozrevatel.com/ukr/rss.xml"
 
     def __init__(self):
         """Init main class."""
@@ -73,8 +73,9 @@ class SourceParser:
                     )
                     self.logger.write_error(message)
         except URLError as e:
-            message = "URLError with reason {}".format(
-                e.reason
+            message = "URLError with reason {}, URL: {}".format(
+                e.reason,
+                link
             )
             self.logger.write_error(message)
         except HTTPError as e:

@@ -34,7 +34,6 @@ class SourceParser:
                 encoding = response.info().get_content_charset("utf-8")
                 data = response.read()
                 json_data = json.loads(data.decode(encoding))
-                print(json_data)
         except URLError as e:
             message = "URLError with reason {}".format(
                 e.reason
