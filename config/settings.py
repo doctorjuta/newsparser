@@ -133,6 +133,9 @@ EMAIL_HOST_USER = 'dutchak@wordpress.lviv.ua'
 EMAIL_HOST_PASSWORD = ';NHr*)(}?wL#'
 
 
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1916.47 Safari/537.36'
+
+
 try:
     from config.local_settings import *
 except ImportError:

@@ -6,12 +6,13 @@ from bs4 import BeautifulSoup
 import urllib.request as ur
 from urllib.error import HTTPError, URLError
 from config.logger import AppLogger
+from django.conf import settings
 
 
 class SourceParser:
     """Main class for Segodnya site parser."""
 
-    src = "https://segodnya.ua/data/last_news_ru.json"
+    src = "https://www.segodnya.ua/data/last_news_uk.json"
 
     def __init__(self):
         """Init main class."""
@@ -22,10 +23,18 @@ class SourceParser:
         json_data = []
         news = []
         try:
-            with ur.urlopen(self.src) as response:
+            req = ur.Request(
+                self.src,
+                data=None,
+                headers={
+                    'User-Agent': settings.USER_AGENT
+                }
+            )
+            with ur.urlopen(req) as response:
                 encoding = response.info().get_content_charset("utf-8")
                 data = response.read()
                 json_data = json.loads(data.decode(encoding))
+                print(json_data)
         except URLError as e:
             message = "URLError with reason {}".format(
                 e.reason
@@ -39,6 +48,8 @@ class SourceParser:
             self.logger.write_error(message)
         for n in json_data:
             link = n["path"]
+            if "/uk/" in link:
+                link = link.replace("/uk/", "/ua/")
             text = self.get_news_text(link)
             tz = pytz.timezone("UTC")
             date = datetime.fromtimestamp(n["timestamp"], tz=tz)
@@ -99,8 +110,9 @@ class SourceParser:
                     )
                     self.logger.write_error(message)
         except URLError as e:
-            message = "URLError with reason {}".format(
-                e.reason
+            message = "URLError with reason {}, URL: {}".format(
+                e.reason,
+                link
             )
             self.logger.write_error(message)
         except HTTPError as e:
