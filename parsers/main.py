@@ -40,6 +40,11 @@ class MainParser:
                 continue
             parser = parser_mod.SourceParser()
             news = parser.get_news()
+            if len(news) < 1:
+                logger_message = "Got 0 news for parser {}.".format(
+                    s.parser
+                )
+                self.logger.write_error(logger_message)
             for n in news:
                 try:
                     obj, created = NewsMessage.objects.get_or_create(

@@ -15,7 +15,7 @@ class SourceParser:
 
     def __init__(self):
         """Init main class."""
-        self.logger = AppLogger("parser_obozrevatel")
+        self.logger = AppLogger("parser_segodnya")
 
     def get_news(self):
         """Get new posts from current source."""

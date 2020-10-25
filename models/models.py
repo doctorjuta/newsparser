@@ -14,7 +14,8 @@ class NewsSource(models.Model):
         ("segodnya", "Segodnya"),
         ("ua24", "24 channel"),
         ("rbc", "RBC"),
-        ("znaj", "Znaj")
+        ("znaj", "Znaj"),
+        ("channel112", "112 Channel")
     ]
 
     name = models.CharField(
