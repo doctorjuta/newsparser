@@ -65,11 +65,13 @@ class SourceParser:
                     "mob-show",
                     "mob-hide",
                     "article-tags",
-                    "article-source"
+                    "article-source",
+                    "clearfix",
+                    "video-page-content"
                 ]
                 text_div = soup.find("div", class_="article-content_text")
                 if not text_div:
-                    text_div = soup.find("div", class_="post__text")
+                    text_div = soup.find("section", class_="page-cont")
                 if text_div:
                     for cls in class_to_remove:
                         for div in text_div.find_all("div", {"class": cls}):
