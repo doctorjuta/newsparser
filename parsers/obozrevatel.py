@@ -56,35 +56,47 @@ class SourceParser:
         ]
         request = ur.Request(
             link,
-            {},
+            None,
             self._headers,
             "https://obozrevatel.com"
         )
-        with ur.urlopen(request) as response:
-            soup = BeautifulSoup(
-                response.read(),
-                "html.parser",
-                from_encoding="cp1251"
-            )
-            text_div = soup.find("div", class_="newsFull_text")
-            if not text_div:
-                text_div = soup.find("div", class_="news-video-full__text")
-            if not text_div:
-                text_div = soup.find("div", class_="news-full__text")
-            if not text_div:
-                text_div = soup.find("div", class_="newsItem_fullText")
-            if text_div:
-                for cls in class_to_remove:
-                    for div in text_div.find_all("div", {"class": cls}):
-                        div.decompose()
-                for script in text_div(["script", "style"]):
-                    script.decompose()
-                text = text_div.get_text()
-                if soup.original_encoding == 'cp1251':
-                    text = text.encode('cp1251').decode('utf-8')
-            else:
-                message = "Can not find text block for URL {}".format(
-                    link
+        try:
+            with ur.urlopen(request) as response:
+                soup = BeautifulSoup(
+                    response.read(),
+                    "html.parser",
+                    from_encoding="cp1251"
                 )
-                self.logger.write_error(message)
+                text_div = soup.find("div", class_="newsFull_text")
+                if not text_div:
+                    text_div = soup.find("div", class_="news-video-full__text")
+                if not text_div:
+                    text_div = soup.find("div", class_="news-full__text")
+                if not text_div:
+                    text_div = soup.find("div", class_="newsItem_fullText")
+                if text_div:
+                    for cls in class_to_remove:
+                        for div in text_div.find_all("div", {"class": cls}):
+                            div.decompose()
+                    for script in text_div(["script", "style"]):
+                        script.decompose()
+                    text = text_div.get_text()
+                    if soup.original_encoding == 'cp1251':
+                        text = text.encode('cp1251').decode('utf-8')
+                else:
+                    message = "Can not find text block for URL {}".format(
+                        link
+                    )
+                    self.logger.write_error(message)
+        except URLError as e:
+            message = "URLError with reason {}".format(
+                e.reason
+            )
+            self.logger.write_error(message)
+        except HTTPError as e:
+            message = "HTTPError with code {} and reason {}".format(
+                e.code,
+                e.reason
+            )
+            self.logger.write_error(message)
         return text
