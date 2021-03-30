@@ -83,7 +83,14 @@ class SourceParser:
             "content-meta"
         ]
         try:
-            with ur.urlopen(link) as response:
+            req = ur.Request(
+                link,
+                data=None,
+                headers={
+                    'User-Agent': settings.USER_AGENT
+                }
+            )
+            with ur.urlopen(req) as response:
                 soup = BeautifulSoup(
                     response.read(),
                     "html.parser",
