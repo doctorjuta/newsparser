@@ -82,7 +82,10 @@ class SourceParser:
                         script.decompose()
                     text = text_div.get_text()
                     if soup.original_encoding == 'cp1251':
-                        text = text.encode('cp1251').decode('utf-8')
+                        try:
+                            text = text.encode('cp1251').decode('utf-8')
+                        except UnicodeDecodeError:
+                            pass
                 else:
                     message = "Can not find text block for URL {}".format(
                         link
