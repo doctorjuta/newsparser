@@ -93,8 +93,7 @@ class SourceParser:
             with ur.urlopen(req) as response:
                 soup = BeautifulSoup(
                     response.read(),
-                    "html.parser",
-                    from_encoding="cp1251"
+                    "html.parser"
                 )
                 text_div = soup.find("div", class_="article__body")
                 if not text_div:
@@ -109,7 +108,7 @@ class SourceParser:
                             div.decompose()
                     for script in text_div(["script", "style"]):
                         script.decompose()
-                    text = text_div.get_text()
+                    text = text_div.get_text().strip()
                 else:
                     message = "Can not find text block for URL {}".format(
                         link
