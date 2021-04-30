@@ -28,5 +28,5 @@ retrying==1.3.3
 six==1.12.0
 soupsieve==1.9.4
 sqlparse==0.3.0
-urllib3==1.25.7
+urllib3==1.25.8
 whitenoise==4.1.3
