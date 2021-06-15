@@ -102,6 +102,8 @@ class SourceParser:
                         text_div = text_div.find("div", class_="col-lg-8")
                 if not text_div:
                     text_div = soup.find("article", class_="article__content")
+                if not text_div:
+                    text_div = soup.find("div", class_="article__content")
                 if text_div:
                     for cls in class_to_remove:
                         for div in text_div.find_all("div", {"class": cls}):
