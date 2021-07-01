@@ -95,6 +95,8 @@ class SourceParser:
                     response.read(),
                     "html.parser"
                 )
+                if 'Project Shield Logo' in str(soup):
+                    return ''
                 text_div = soup.find("div", class_="article__body")
                 if not text_div:
                     text_div = soup.find("div", class_="article-content")
