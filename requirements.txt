@@ -15,7 +15,7 @@ matplotlib==3.1.2
 Morfessor==2.0.6
 mysqlclient==1.4.4
 nltk==3.4.5
-numpy==1.17.3
+numpy==1.22.0
 Pillow==6.2.1
 polyglot==16.7.4
 psycopg2==2.8.3
